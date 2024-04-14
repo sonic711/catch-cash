@@ -1,0 +1,10 @@
+repositories {
+    mavenCentral()
+}
+dependencies {
+    // include the model project
+    implementation project(':model')
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+}
+//jar.enabled = true
+//bootJar.enabled = false

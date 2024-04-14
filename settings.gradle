@@ -1,0 +1,3 @@
+rootProject.name = 'catch-cash'
+include 'web'
+include 'model'
