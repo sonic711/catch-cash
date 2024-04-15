@@ -1,5 +1,7 @@
 package com.sean.web.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.sean.model.entities.MemberEntity;
@@ -13,7 +15,7 @@ public class TestService {
 	public TestService(MemberRepo memberRepo) {this.memberRepo = memberRepo;}
 
 	public String test() {
-		MemberEntity test = memberRepo.findByEmail("test");
-		return "Hello World!";
+		List<MemberEntity> test = memberRepo.findAll();
+		return test.toString();
 	}
 }
