@@ -4,8 +4,10 @@ repositories {
 }
 
 dependencies {
+    implementation group: 'com.twitter', name: 'maple', version: '0.17.4'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    // https://mvnrepository.com/artifact/com.twitter/maple
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 }
 
