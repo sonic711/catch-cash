@@ -1,5 +1,6 @@
 package com.sean.model.entities;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -16,8 +17,9 @@ import lombok.Setter;
 @Setter
 public abstract class GenericEntity implements Serializable{
 
+	@Serial
 	private static final long serialVersionUID = 8947523181149518228L;
-	
+
 	@Column(name = "CREATOR", length = 20, nullable = false)
 	private String createUser;
 	@Column(name = "CREATETIME", nullable = false)

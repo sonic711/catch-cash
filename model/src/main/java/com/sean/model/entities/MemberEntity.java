@@ -26,7 +26,7 @@ public class MemberEntity extends GenericEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 使用資料庫自動增加策略
 	@Column(name = "ID")
-	private Long id;
+	private Integer id;
 	@Column(name = "NAME")
 	private String name;
 	@Column(name = "AGE")
