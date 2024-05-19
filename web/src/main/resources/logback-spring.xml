@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="ENCODING" value="UTF-8"/>
+    <!-- Log Content Style : %d表示日期，%thread表示執行緒號，%-5level：LOG等級(顯示5碼)，%msg：LOG內容，%n:換行 -->
+    <property name="NORMAL_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+    <!-- Log Content Style : 彩色版 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%-5level) %magenta(%thread) %red(%file:%line) %green(%logger) %cyan(%msg%n)"/>
+    <!--	<property name="LOG_PATH" value="${user.home}/logs" />-->
+    <springProperty name="LOG_PATH" source="logging.file.path" defaultValue="/Users/sonic711/logs"/>
+    <springProperty name="FOLDER_NAME" source="spring.application.name" defaultValue="catch-cash"/>
+
+    <springProfile name="local">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>${ENCODING}</charset>
+            </encoder>
+        </appender>
+        <logger level="DEBUG" name="com.sean"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+    <springProfile name="dev">
+        <appender name="FILE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/${FOLDER_NAME}/%d{yyyyMMdd}-%i.log.zip
+                </fileNamePattern>
+                <maxFileSize>100MB</maxFileSize>
+                <maxHistory>100</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${NORMAL_LOG_PATTERN}</pattern>
+                <charset>${ENCODING}</charset>
+            </encoder>
+        </appender>
+        <logger level="DEBUG" name="com.sean"/>
+        <root level="INFO">
+            <appender-ref ref="FILE_LOG"/>
+        </root>
+    </springProfile>
+</configuration>

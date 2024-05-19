@@ -10,5 +10,19 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
 
 }
-
-bootJar.enabled = true
+def profile = project.hasProperty("profile") ? project.property("profile") : "local"
+processResources {
+    filesMatching("application.properties") {
+        expand(["springProfile": profile])
+    }
+    // 過濾 resources
+    include("apiNode**.yml")
+    include("application.properties")
+    include("application-${profile}.properties")
+    include("logback-spring.xml")
+    include("sql/**")
+}
+bootJar {
+    archiveFileName = 'web-server.jar'
+    enabled = true
+}
