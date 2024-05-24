@@ -3,6 +3,7 @@ package com.sean.web.service;
 import com.sean.model.dao.member.MemberDao;
 import com.sean.model.entities.MemberEntity;
 import com.sean.web.vo.MemberDetailVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
 public class MemberService {
 
     private final MemberDao memberDao;
@@ -20,12 +22,18 @@ public class MemberService {
 
     public MemberDetailVO getMember(Integer memberId) {
         MemberDetailVO memberDetailVO = null;
-        if (null != memberId) {
-            MemberEntity member = memberDao.getMember(memberId);
-            memberDetailVO = new MemberDetailVO();
-            BeanUtils.copyProperties(member, memberDetailVO);
-        } else {
-            // todo 可自行處理
+        try {
+
+            if (null != memberId) {
+                MemberEntity member = memberDao.getMember(memberId);
+                memberDetailVO = new MemberDetailVO();
+                BeanUtils.copyProperties(member, memberDetailVO);
+            } else {
+                // 肯定找不到資料，直接回傳空的VO
+                memberDetailVO = new MemberDetailVO();
+            }
+        } catch (Exception e) {
+            log.error("getMember error", e);
         }
         return memberDetailVO;
     }

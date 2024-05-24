@@ -38,7 +38,7 @@ public class MemberSQL implements MemberDao {
             return jdbcTemplate.queryForObject(sql, rowMapper, memberId);
         } catch (EmptyResultDataAccessException e) {
             // 如果查詢結果為空，返回空的
-            log.debug("getMember exception: {}",e.getLocalizedMessage());
+            log.debug("getMember exception: {}", e.getLocalizedMessage());
             return new MemberEntity();
         }
     }
@@ -56,7 +56,7 @@ public class MemberSQL implements MemberDao {
             member.setPassword(rs.getString("password"));
             member.setCreateTime(rs.getTimestamp("CREATETIME").toLocalDateTime());
             member.setUpdateTime(rs.getTimestamp("LASTUPDATE").toLocalDateTime());
-            member.setCreateUser(rs.getString("CREATETIME"));
+            member.setCreateUser(rs.getString("CREATOR"));
             member.setUpdateUser(rs.getString("MODIFIER"));
             // todo 剩下的欄位
             return member;
@@ -66,15 +66,15 @@ public class MemberSQL implements MemberDao {
 
     @Override
     public void saveMember(MemberEntity member) {
-        jdbcTemplate.update("INSERT INTO member (name, email, password, CREATETIME, LASTUPDATE, CREATOR, MODIFIER) VALUES (?,?,?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,?,?)",
-                member.getName(), member.getEmail(), member.getPassword());
+        jdbcTemplate.update("INSERT INTO member (name, email, password, CREATETIME, LASTUPDATE, CREATOR, MODIFIER) VALUES (?,?,?,SYSDATE, SYSDATE,?,?)",
+                member.getName(), member.getEmail(), member.getPassword(), "ADMIN", "ADMIN");
 
     }
 
     @Override
     public void updateMember(MemberEntity member) {
-        jdbcTemplate.update("UPDATE member SET name =?, email =?, password =?, LASTUPDATE = CURRENT_TIMESTAMP, MODIFIER =? WHERE id =?",
-                member.getName(), member.getEmail(), member.getPassword(), member.getUpdateUser(), member.getId());
+        jdbcTemplate.update("UPDATE member SET name =?, email =?, password =?, LASTUPDATE = SYSDATE, MODIFIER =? WHERE id =?",
+                member.getName(), member.getEmail(), member.getPassword(), "ADMIN", member.getId());
 
     }
 
