@@ -87,7 +87,6 @@ pipeline {
         }
     }
 
-}
 # ssh setting
 RUN echo "$ssh_usr:$ssh_pwd" >> ~/passwdfile && \
     chpasswd -c SHA512 < ~/passwdfile && \
@@ -101,3 +100,4 @@ EXPOSE 22
 
 # set entrypoint to restart ssh automatically
 ENTRYPOINT service ssh restart && bash
+}
