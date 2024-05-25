@@ -7,9 +7,9 @@
         label-width="30%">
       <el-row>
         <el-col :span="12">
-          <el-form-item label="帳號" prop="account">
+          <el-form-item label="帳號" prop="name">
             <el-input
-                v-model="pageObj.form.account"
+                v-model="pageObj.form.name"
                 style="width: 240px"
                 placeholder="請輸入帳號"/>
           </el-form-item>
@@ -17,10 +17,10 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="密碼" prop="pwd">
+          <el-form-item label="密碼" prop="password">
             <el-input
-                prop="pwd"
-                v-model="pageObj.form.pwd"
+                prop="password"
+                v-model="pageObj.form.password"
                 style="width: 240px"
                 placeholder="請輸入密碼"/>
           </el-form-item>
@@ -43,8 +43,6 @@
                 v-model="pageObj.form.like"
                 placeholder="請選擇"
                 clearable
-                @click="console.log('123')"
-                @change="selectOutfmId"
             >
               <el-option
                   v-for="item in likeOptions"
@@ -71,8 +69,8 @@
   <div class="query-result">
     <div v-if="hasData">
       <el-table v-loading="loading" :data="pageObj.members" border stripe>
-        <el-table-column label="帳號" prop="account"/>
-        <el-table-column label="密碼" prop="pwd"/>
+        <el-table-column label="帳號" prop="name"/>
+        <el-table-column label="密碼" prop="password"/>
         <el-table-column label="操作" align="left" width="90">
           <template #default="scope">
             <el-button link type="primary" @click="remove(scope.row, scope.$index)">
@@ -94,6 +92,7 @@ import {useRoute, useRouter} from 'vue-router'
 import {onMounted, reactive, ref} from "vue";
 import {ElMessage, ElMessageBox, type FormInstance, type FormRules} from "element-plus";
 import {usePageDataStore} from "@/stores/counter";
+import axios from "axios";
 
 
 // route
@@ -103,54 +102,64 @@ const router = useRouter()
 const pageDataStore = usePageDataStore()
 const pageObj = reactive({
   form: {
-    account: "",
-    pwd: "",
+    name: "",
+    password: "",
     message: "",
     sex: "G",
-  },
+  } as any,
   members: [] as any[],
 })
 // 響應式物件
 const ruleFormRef = ref<FormInstance>()
 
 const rules = reactive<FormRules>({
-  account: [{required: true, message: '請填寫帳號', trigger: ['blur', 'change']}],
-  pwd: [{required: true, message: '請填寫密碼', trigger: 'change'}],
+  name: [{required: true, message: '請填寫帳號', trigger: ['blur', 'change']}],
+  password: [{required: true, message: '請填寫密碼', trigger: 'change'}],
 });
-const hasData = ref(false)
+const hasData = ref(true)
 const loading = ref(false)
 const likeOptions = ref([
       {value: '1', label: '節目'},
       {value: '2', label: '電影'},
     ]
 )
-const queryMembers = () => {
+const queryMembers = async () => {
   loading.value = true
-  mockData()
-      .then(data => {
-        console.log(data)
-        pageObj.members = data
-        hasData.value = pageObj.members.length > 0;
-        loading.value = false
-      })
-      .catch(error => {
-        console.error(error); // 在這裡處理錯誤
-      });
+  await axios.get('http://127.0.0.1:9090/catch-cash/api/member').then(res => {
+    console.log(res)
+    if(res.status === 200){
+      console.log(res.data)
+      pageObj.members = res.data as any[]
+    }
+    loading.value = false
+  });
+
+  // 模擬資料
+  // mockData()
+  //     .then(data => {
+  //       console.log(data)
+  //       pageObj.members = data as any[]
+  //       hasData.value = pageObj.members.length > 0;
+  //       loading.value = false
+  //     })
+  //     .catch(error => {
+  //       console.error(error); // 在這裡處理錯誤
+  //     });
 }
 const mockData = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([{
-        account: "John",
-        pwd: "123456",
+        name: "John",
+        password: "123456",
         message: "Welcome John!"
       }, {
-        account: "Mary",
-        pwd: "654321",
+        name: "Mary",
+        password: "654321",
         message: "Welcome Mary!"
       }, {
-        account: "Tom",
-        pwd: "111111",
+        name: "Tom",
+        password: "111111",
         message: "Welcome Tom!"
       }]);
     }, 1000);
@@ -159,7 +168,16 @@ const mockData = () => {
 const submitForm = () => {
   ruleFormRef.value?.validate(async (valid: any) => {
     if (valid) {
-      pageObj.members.push(pageObj.form)
+      // pageObj.members.push(pageObj.form)
+      const data = {
+        name: pageObj.form.name,
+        password: pageObj.form.password,
+      }
+      console.log(data)
+      await axios.post('http://127.0.0.1:9090/catch-cash/api/member', data).then(res => {
+        console.log(res)
+        queryMembers()
+      });
     } else {
       await ElMessageBox.alert('這裡發生了錯誤', '錯誤', {
         confirmButtonText: '確定',
@@ -189,8 +207,13 @@ const clearForm = () => {
   pageObj.members = []
 }
 
-const remove = (row: any, index: number) => {
-  pageObj.members.splice(index, 1)
+const remove = async (row: any, index: number) => {
+  // pageObj.members.splice(index, 1)
+  await axios.delete(`http://127.0.0.1:9090/catch-cash/api/member/${row.id}`).then(res => {
+    console.log(res)
+    queryMembers()
+  });
+
 }
 onMounted(() => {
   queryMembers()

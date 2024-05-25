@@ -118,7 +118,6 @@ const queryFromDB = async() => {
   });
   // 接著執行
   loading.value = false
-  console.log('123')
 }
 
 onBeforeMount(() => {

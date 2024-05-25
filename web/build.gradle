@@ -6,12 +6,14 @@ dependencies {
     // include the model project
     implementation project(':model')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
-    implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.2.1'
+    // httpclient5
+    implementation 'org.apache.httpcomponents.client5.httpclient5:5.2.1'
     // gson
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
-
+    // swagge-ui
+    implementation 'org.springdoc.springdoc-openapi-starter-webmvc-ui:2.2.0'
+    // jasypt
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 }
 def profile = project.hasProperty("profile") ? project.property("profile") : "local"
 processResources {

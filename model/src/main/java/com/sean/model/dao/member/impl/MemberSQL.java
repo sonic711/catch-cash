@@ -57,6 +57,8 @@ public class MemberSQL implements MemberDao {
 			member.setId(rs.getInt("id"));
 			member.setName(rs.getString("name"));
 			member.setEmail(rs.getString("email"));
+			member.setAge(rs.getInt("age"));
+			member.setProfileImage(rs.getBytes("image"));
 			member.setPassword(rs.getString("password"));
 			member.setCreateTime(rs.getTimestamp("CREATETIME").toLocalDateTime());
 			member.setUpdateTime(rs.getTimestamp("LASTUPDATE").toLocalDateTime());

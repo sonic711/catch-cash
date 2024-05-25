@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,13 +50,15 @@ public class MemberController {
 			tags = { "Member" }, //
 			requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "會員資料", required = true, content = @Content(mediaType = "application/json", schema = @Schema(implementation = MemberEntity.class))), responses = { @ApiResponse(responseCode = "200", description = "Created"), @ApiResponse(responseCode = "400", description = "Bad Request") })
 	@PostMapping
-	public void createMember(MemberEntity member) {
-		mainService.saveMember(member);
+	public void createMember(@RequestBody MemberDetailVO member) {
+		MemberEntity memberEntity = new MemberEntity();
+		BeanUtils.copyProperties(member, memberEntity);
+		mainService.saveMember(memberEntity);
 	}
 
 	@Operation(summary = "Update Member", description = "更新會員資料", tags = { "Member" }, requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "會員資料", required = true, content = @Content(mediaType = "application/json", schema = @Schema(implementation = MemberEntity.class))), responses = { @ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "400", description = "Bad Request") })
 	@PutMapping
-	public void updateMember(MemberEntity member) {
+	public void updateMember(@RequestBody MemberEntity member) {
 		mainService.updateMember(member);
 	}
 
@@ -68,7 +71,7 @@ public class MemberController {
 	// 上傳圖片
 	@Operation(summary = "Upload Member Image", description = "上傳會員照片", tags = { "Member" }, parameters = { @Parameter(name = "memberId", description = "會員編號", required = true, example = "1") }, requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "照片檔案", required = true, content = @Content(mediaType = "multipart/form-data")), responses = { @ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "400", description = "Bad Request") })
 	@PostMapping(value = "/image/{memberId}")
-	public void uploadMemberImage(@PathVariable Integer memberId, @RequestParam("file") MultipartFile file) {
+	public void uploadMemberImage(@PathVariable Integer memberId, @RequestParam("file") @RequestBody MultipartFile file) {
 		mainService.uploadImg(memberId, file);
 	}
 
