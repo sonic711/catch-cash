@@ -87,14 +87,4 @@ pipeline {
         }
     }
 
-RUN echo "$ssh_usr:$ssh_pwd" >> ~/passwdfile && \
-    chpasswd -c SHA512 < ~/passwdfile && \
-    rm ~/passwdfile && \
-    sed -i "s/#Port.*/Port 22/" /etc/ssh/sshd_config && \
-    sed -i "s/#PermitRootLogin.*/PermitRootLogin yes/" /etc/ssh/sshd_config && \
-    sed -i "s/#PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config
-
-EXPOSE 22
-
-ENTRYPOINT service ssh restart && bash
 }
