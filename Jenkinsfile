@@ -87,7 +87,6 @@ pipeline {
         }
     }
 
-# ssh setting
 RUN echo "$ssh_usr:$ssh_pwd" >> ~/passwdfile && \
     chpasswd -c SHA512 < ~/passwdfile && \
     rm ~/passwdfile && \
@@ -95,9 +94,7 @@ RUN echo "$ssh_usr:$ssh_pwd" >> ~/passwdfile && \
     sed -i "s/#PermitRootLogin.*/PermitRootLogin yes/" /etc/ssh/sshd_config && \
     sed -i "s/#PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config
 
-# expose the port 22(which is the default port of ssh)
 EXPOSE 22
 
-# set entrypoint to restart ssh automatically
 ENTRYPOINT service ssh restart && bash
 }
