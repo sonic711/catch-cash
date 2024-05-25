@@ -4,6 +4,8 @@ import com.sean.model.entities.MemberEntity;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface MemberDao {
 
     MemberEntity getMember(Integer memberId);
@@ -15,4 +17,8 @@ public interface MemberDao {
     void updateMember(MemberEntity member);
 
     void deleteMember(Integer memberId);
+
+    void uploadImage(Integer memberId, MultipartFile file);
+
+    byte[] downloadImage(Integer memberId);
 }

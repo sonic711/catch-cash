@@ -10,7 +10,7 @@
     <springProperty name="LOG_PATH" source="logging.file.path" defaultValue="/Users/sonic711/logs"/>
     <springProperty name="FOLDER_NAME" source="spring.application.name" defaultValue="catch-cash"/>
 
-    <springProfile name="local">
+    <springProfile name="local, mssql">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${CONSOLE_LOG_PATTERN}</pattern>

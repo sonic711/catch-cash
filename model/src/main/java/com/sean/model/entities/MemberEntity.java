@@ -35,4 +35,6 @@ public class MemberEntity extends GenericEntity {
 	private String email;
 	@Column(name = "PASSWORD")
 	private String password;
+	@Column(name = "IMAGE", columnDefinition = "varbinary(max)")
+	private byte[] profileImage;
 }

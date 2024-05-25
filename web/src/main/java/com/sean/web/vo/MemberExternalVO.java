@@ -1,6 +1,5 @@
 package com.sean.web.vo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 

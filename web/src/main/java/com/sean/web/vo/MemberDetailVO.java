@@ -22,6 +22,8 @@ public class MemberDetailVO {
 
     private String password;
 
+    private byte[] profileImage;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 }

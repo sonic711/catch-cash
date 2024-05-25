@@ -19,7 +19,6 @@ processResources {
         expand(["springProfile": profile])
     }
     // 過濾 resources
-    include("apiNode**.yml")
     include("application.properties")
     include("application-${profile}.properties")
     include("logback-spring.xml")

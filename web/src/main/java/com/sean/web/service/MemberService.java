@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -43,14 +45,25 @@ public class MemberService {
     }
 
     public void saveMember(MemberEntity member) {
+        member.setCreateUser("ADMIN");
         memberDao.saveMember(member);
     }
 
     public void updateMember(MemberEntity member) {
+        member.setUpdateUser("ADMIN123");
         memberDao.updateMember(member);
     }
 
     public void deleteMember(Integer memberId) {
         memberDao.deleteMember(memberId);
+    }
+    // 上傳圖片
+    public void uploadImg(Integer memberId, @RequestParam("file") MultipartFile file){
+        memberDao.uploadImage(memberId, file);
+    }
+
+    // 下載圖片
+    public byte[] downloadImg(Integer memberId){
+        return memberDao.downloadImage(memberId);
     }
 }
