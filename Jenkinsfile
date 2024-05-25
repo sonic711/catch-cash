@@ -47,17 +47,21 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh '''ssh -tt $ssh_server << remotessh
-                    cd $ssh_dir
-                    sh ./stop.sh
-                    exit
-                    remotessh'''
-                sh 'scp /opt/jenkins/data/jobs/Catch-Cash/workspace/build/libs/web-server.jar $ssh_server:$ssh_dir/web-server.jar'
-                sh '''ssh -tt $ssh_server << remotessh
-                    cd $ssh_dir
-                    sh ./run.sh
-                    exit
-                    remotessh'''
+                    sh '''
+                    cd /var/jenkins_home/workspace/Catch-Cash/web/build/libs
+                    nohup java -jar web-server.jar &
+                    '''
+//                 sh '''ssh -tt $ssh_server << remotessh
+//                     cd $ssh_dir
+//                     sh ./stop.sh
+//                     exit
+//                     remotessh'''
+//                 sh 'scp /var/jenkins_home/workspace/Catch-Cash/web/build/libs/web-server.jar $ssh_server:$ssh_dir/web-server.jar'
+//                 sh '''ssh -tt $ssh_server << remotessh
+//                     cd $ssh_dir
+//                     sh ./run.sh
+//                     exit
+//                     remotessh'''
             }
         }
     }
