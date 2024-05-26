@@ -93,6 +93,7 @@ import {onMounted, reactive, ref} from "vue";
 import {ElMessage, ElMessageBox, type FormInstance, type FormRules} from "element-plus";
 import {usePageDataStore} from "@/stores/counter";
 import axios from "axios";
+import ApiService from '../api/request';
 
 
 // route
@@ -125,14 +126,23 @@ const likeOptions = ref([
 )
 const queryMembers = async () => {
   loading.value = true
-  await axios.get('http://127.0.0.1:9090/catch-cash/api/member').then(res => {
-    console.log(res)
-    if(res.status === 200){
-      console.log(res.data)
-      pageObj.members = res.data as any[]
-    }
-    loading.value = false
-  });
+
+  try {
+    const res = await ApiService.get('/api/member') as any;
+    pageObj.members = res as any[]
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  loading.value = false
+
+  // await axios.get('http://127.0.0.1:9090/catch-cash/api/member').then(res => {
+  //   console.log(res)
+  //   if(res.status === 200){
+  //     console.log(res.data)
+  //     pageObj.members = res.data as any[]
+  //   }
+  //   loading.value = false
+  // });
 
   // 模擬資料
   // mockData()
