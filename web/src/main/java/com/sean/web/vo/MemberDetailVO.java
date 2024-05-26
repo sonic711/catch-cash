@@ -26,7 +26,8 @@ public class MemberDetailVO {
     @SerializedName("password")
     private String password;
 
-    private byte[] profileImage;
+    // 前端傳入的圖片
+    private String profileImage;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;

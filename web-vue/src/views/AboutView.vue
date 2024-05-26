@@ -53,6 +53,11 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item label="圖片" prop="img">
+            <input type="file" @change="onFileChange"/>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
     <el-row>
@@ -65,6 +70,14 @@
         </div>
       </el-col>
     </el-row>
+    <el-row>
+      <el-col :span="24">
+        <div v-if="imageUrl">
+          <h2>預覽:</h2>
+          <img :src="imageUrl" alt="Image Preview" style="max-width: 300px;"/>
+        </div>
+      </el-col>
+    </el-row>
   </div>
   <div class="query-result">
     <div v-if="hasData">
@@ -73,6 +86,9 @@
         <el-table-column label="密碼" prop="password"/>
         <el-table-column label="操作" align="left" width="90">
           <template #default="scope">
+            <el-button link type="primary" @click="showImg(scope.row, scope.$index)">
+              顯示圖片
+            </el-button>
             <el-button link type="primary" @click="remove(scope.row, scope.$index)">
               移除
             </el-button>
@@ -83,6 +99,12 @@
     <div v-else style="display: none">
       <p>查無資料</p>
     </div>
+    <el-image-viewer
+        v-if="showImagePreview"
+        :zoom-rate="1.2"
+        @close="closePreview"
+        :url-list="imgPreviewList"
+    />
   </div>
 </template>
 
@@ -90,11 +112,17 @@
 <script setup lang="ts">
 import {useRoute, useRouter} from 'vue-router'
 import {onMounted, reactive, ref} from "vue";
-import {ElMessage, ElMessageBox, type FormInstance, type FormRules} from "element-plus";
+import {ElMessage, ElMessageBox, type FormInstance, type FormRules, type UploadProps} from "element-plus";
 import {usePageDataStore} from "@/stores/counter";
 import axios from "axios";
 import ApiService from '../api/request';
 
+const imgPreviewList = ref<any>([])
+const showImagePreview = ref(false)
+const currentBase64FileData = reactive({
+  base64: '',
+  name: ''
+})
 
 // route
 const route = useRoute()
@@ -107,6 +135,7 @@ const pageObj = reactive({
     password: "",
     message: "",
     sex: "G",
+    file: {} as any,
   } as any,
   members: [] as any[],
 })
@@ -126,7 +155,6 @@ const likeOptions = ref([
 )
 const queryMembers = async () => {
   loading.value = true
-
   try {
     const res = await ApiService.get('/api/member') as any;
     pageObj.members = res as any[]
@@ -182,6 +210,7 @@ const submitForm = () => {
       const data = {
         name: pageObj.form.name,
         password: pageObj.form.password,
+        profileImage: pageObj.form.img,
       }
       console.log(data)
       await axios.post('http://127.0.0.1:9090/catch-cash/api/member', data).then(res => {
@@ -217,13 +246,41 @@ const clearForm = () => {
   pageObj.members = []
 }
 
+const showImg = async (row: any, index: number) => {
+  try {
+    let res = await ApiService.get(`/api/member/image/${row.id}`) as any;
+    currentBase64FileData.base64 = res
+    showImagePreview.value = true
+    imgPreviewList.value = [currentBase64FileData.base64]
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  loading.value = false
+}
+
+const closePreview = () => {
+  imgPreviewList.value = []
+  showImagePreview.value = false
+}
+
+const imageUrl = ref('')
+
+const onFileChange = (e: any) => {
+  const file = e.target.files[0]
+  const reader = new FileReader()
+  reader.readAsDataURL(file)
+  reader.onload = () => {
+    pageObj.form.img = reader.result as string
+    imageUrl.value = reader.result as string
+  }
+}
+
 const remove = async (row: any, index: number) => {
   // pageObj.members.splice(index, 1)
   await axios.delete(`http://127.0.0.1:9090/catch-cash/api/member/${row.id}`).then(res => {
     console.log(res)
     queryMembers()
   });
-
 }
 onMounted(() => {
   queryMembers()

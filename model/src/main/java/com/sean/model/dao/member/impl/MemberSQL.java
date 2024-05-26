@@ -72,8 +72,8 @@ public class MemberSQL implements MemberDao {
 
 	@Override
 	public void saveMember(MemberEntity member) {
-		jdbcTemplate.update("INSERT INTO member (name, email, password, CREATETIME, LASTUPDATE, CREATOR, MODIFIER) VALUES (?,?,?,?, ?,?,?)",//
-				member.getName(), member.getEmail(), member.getPassword(), LocalDateTime.now(), LocalDateTime.now(), "ADMIN", "ADMIN");
+		jdbcTemplate.update("INSERT INTO member (name, email, password, image,CREATETIME, LASTUPDATE, CREATOR, MODIFIER) VALUES (?,?,?,?,?,?,?,?)",//
+				member.getName(), member.getEmail(), member.getPassword(), member.getProfileImage(), LocalDateTime.now(), LocalDateTime.now(), "ADMIN", "ADMIN");
 
 	}
 

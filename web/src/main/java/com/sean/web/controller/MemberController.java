@@ -1,5 +1,22 @@
 package com.sean.web.controller;
 
+import java.util.Base64;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.sean.model.entities.MemberEntity;
 import com.sean.web.service.MemberService;
 import com.sean.web.vo.MemberDetailVO;
@@ -12,13 +29,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-
 import static com.sean.web.api.ApiPathConstant.BASE_PATH;
+import static com.sean.web.api.ApiSettingConstant.JPEG;
+
 
 @RestController
 @RequestMapping(value = BASE_PATH + "/member")
@@ -26,6 +39,7 @@ import static com.sean.web.api.ApiPathConstant.BASE_PATH;
 @Tag(name = "Member")
 public class MemberController {
 
+	private static final Logger log = LoggerFactory.getLogger(MemberController.class);
 	private final MemberService mainService;
 
 	// get 查詢 Member 資料
@@ -52,7 +66,10 @@ public class MemberController {
 	@PostMapping
 	public void createMember(@RequestBody MemberDetailVO member) {
 		MemberEntity memberEntity = new MemberEntity();
+		// 前端傳進來為Base64編碼的圖片，需將其轉換為byte[]存入資料庫
 		BeanUtils.copyProperties(member, memberEntity);
+		memberEntity.setProfileImage(Base64.getDecoder().decode(member.getProfileImage().split(",")[1]));
+
 		mainService.saveMember(memberEntity);
 	}
 
@@ -78,7 +95,9 @@ public class MemberController {
 	// 下載圖片
 	@Operation(summary = "Download Member Image", description = "下載會員照片", tags = { "Member" }, parameters = { @Parameter(name = "memberId", description = "會員編號", required = true, example = "1") }, responses = { @ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Not Found") })
 	@GetMapping(value = "/image/{memberId}")
-	public byte[] downloadMemberImage(@PathVariable Integer memberId) {
-		return mainService.downloadImg(memberId);
+	public String downloadMemberImage(@PathVariable Integer memberId) {
+		byte[] imageBytes = mainService.downloadImg(memberId);
+		String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+		return JPEG + base64Image;
 	}
 }
