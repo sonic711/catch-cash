@@ -1,0 +1,271 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+
+    dependencies {
+        classpath 'com.github.node-gradle:gradle-node-plugin:3.5.1'
+    }
+}
+
+ext {
+    classpath_in_jar = 'public'
+    //可利用參數帶入-Pdeploy_module=:fsap-XXX-XXX
+    deploy_module = project.findProperty('deploy_module') ?: null
+    deploy_dir = deploy_module ? project(deploy_module).projectDir.absolutePath + '/src/main/resources/static' : 'dist'
+}
+
+apply plugin: 'com.github.node-gradle.node'
+apply plugin: 'java'
+
+bootJar {
+    enabled = false
+}
+
+bootRun {
+    enabled = false
+}
+
+bootTestRun {
+    enabled = false
+}
+
+jar {
+    enabled = false
+}
+
+if (gradle.startParameter.offline) {
+    nodeSetup.enabled = false
+    npmSetup.enabled = false
+    yarnSetup.enabled = false
+}
+
+node {
+    version = '18.16.0'
+    yarnVersion = '1.22.18'
+    download = true
+    def user_home = System.getProperty('user.home')
+    workDir = file("${user_home}/buildTool/nodeJs")
+    npmWorkDir = file("${user_home}/buildTool/npm")
+    yarnWorkDir = file("${user_home}/buildTool/yarn")
+}
+
+yarn_install {
+    dependsOn 'yarn'
+}
+
+//yarn_exec_runner {
+//    dependsOn 'yarn'
+//    yarnCommand = ['dev']
+//}
+
+def isTestTask = gradle.startParameter.taskNames.any { it.toLowerCase().contains('test') }
+
+yarn_check_config {
+    yarnCommand = ['config', 'list']
+    onlyIf { !isTestTask }
+}
+
+// 若gradle.properties中有yarnMirrorPath，才執行yarn_set_mirror
+def yarnMirrorPath = project.findProperty('yarnMirrorPath') ?: ''
+// 控制依賴關係 先yarn_check_config -> yarn_set_mirror
+if (yarnMirrorPath) {
+    tasks.yarn_check_config.dependsOn 'yarn_set_mirror'
+}
+
+yarn.mustRunAfter 'yarn_check_config'
+
+yarn_set_mirror {
+    yarnCommand = ['config', 'set', 'yarn-offline-mirror', yarnMirrorPath]
+    onlyIf { !isTestTask }
+}
+
+yarn_build_local {
+    if (yarnMirrorPath) {
+        dependsOn 'yarn_set_mirror'
+    }
+    dependsOn 'yarn_check_config'
+    dependsOn 'yarn'
+    doLast {
+        copy {
+            from 'dist/fsap-admin'
+            into 'build/localJar'
+        }
+    }
+    yarnCommand = ['build:local']
+    onlyIf { !isTestTask }
+}
+
+yarn_build_dev {
+    if (yarnMirrorPath) {
+        dependsOn 'yarn_set_mirror'
+    }
+    dependsOn 'yarn_check_config'
+    dependsOn 'yarn'
+    doLast {
+        copy {
+            from 'dist/fsap-admin'
+            into 'build/devJar'
+        }
+    }
+    yarnCommand = ['build:dev']
+    onlyIf { !isTestTask }
+}
+
+yarn_build_sit {
+    if (yarnMirrorPath) {
+        dependsOn 'yarn_set_mirror'
+    }
+    dependsOn 'yarn_check_config'
+    dependsOn 'yarn'
+    doLast {
+        copy {
+            from 'dist/fsap-admin'
+            into 'build/sitJar'
+        }
+    }
+    yarnCommand = ['build:sit']
+    onlyIf { !isTestTask }
+}
+
+//yarn_build_uat {
+//    if (yarnMirrorUrl) {
+//        dependsOn 'yarn_set_mirror'
+//    }
+//    doLast {
+//        copy {
+//            from 'dist/fsap-admin'
+//            into 'build/uatJar'
+//        }
+//    }
+//    yarnCommand = ['build:uat']
+//    onlyIf { !isTestTask }
+//}
+
+//yarn_build_prod {
+//    if (yarnMirrorUrl) {
+//        dependsOn 'yarn_set_mirror'
+//    }
+//    doLast {
+//        copy {
+//            from 'dist/fsap-admin'
+//            into 'build/prodJar'
+//        }
+//    }
+//    yarnCommand = ['build:prod']
+//    onlyIf { !isTestTask }
+//}
+
+
+task build_local(dependsOn: ['yarn_build_local']) {
+    finalizedBy 'localJar'
+}
+
+task build_dev(dependsOn: ['yarn_build_dev']) {
+    finalizedBy 'devJar'
+}
+
+task build_sit(dependsOn: ['yarn_build_sit']) {
+    finalizedBy 'sitJar'
+}
+
+task build_sit2(dependsOn: ['yarn_build_sit']) {
+    finalizedBy 'sitJar'
+}
+
+//task build_uat(dependsOn: ['yarn_build_uat']) {
+//    finalizedBy 'uatJar'
+//}
+
+//task build_prod(dependsOn: ['yarn_build_prod']) {
+//    finalizedBy 'prodJar'
+//}
+
+task localJar(type: Jar, dependsOn: ['yarn_build_local']) {
+    archiveClassifier = ''
+//    archiveFileName = "${project.name}.jar"
+    from 'build/localJar' into classpath_in_jar
+}
+
+task devJar(type: Jar, dependsOn: ['yarn_build_dev']) {
+    archiveClassifier = ''
+//    archiveFileName = "${project.name}.jar"
+    from 'build/devJar' into classpath_in_jar
+}
+
+
+task sitJar(type: Jar, dependsOn: ['yarn_build_sit']) {
+    archiveClassifier = ''
+//    archiveFileName = "${project.name}.jar"
+    from 'build/sitJar' into classpath_in_jar
+}
+
+task sit2Jar(type: Jar, dependsOn: ['yarn_build_sit']) {
+    archiveClassifier = ''
+//    archiveFileName = "${project.name}.jar"
+    from 'build/sitJar' into classpath_in_jar
+}
+
+//task uatJar(type: Jar, dependsOn: ['yarn_build_uat']) {
+//    archiveClassifier = ''
+//    archiveFileName = "${project.name}.jar"
+//    from 'build/uatJar' into classpath_in_jar
+//}
+
+//task prodJar(type: Jar, dependsOn: ['yarn_build_prod']) {
+//    archiveClassifier = ''
+//    archiveFileName = "${project.name}.jar"
+//    from 'build/prodJar' into classpath_in_jar
+//}
+
+
+configurations {
+    local
+    dev
+    sit
+    sit2
+//    uat
+//    prod
+}
+
+artifacts {
+    local(localJar.archiveFile) {
+        builtBy localJar
+        type 'jar'
+    }
+
+    dev(devJar.archiveFile) {
+        builtBy devJar
+        type 'jar'
+    }
+
+    sit(sitJar.archiveFile) {
+        builtBy sitJar
+        type 'jar'
+    }
+
+    sit2(sit2Jar.archiveFile) {
+        builtBy sit2Jar
+        type 'jar'
+    }
+
+//    uat(uatJar.archiveFile) {
+//        builtBy uatJar
+//        type 'jar'
+//    }
+
+//    prod(prodJar.archiveFile) {
+//        builtBy prodJar
+//        type 'jar'
+//    }
+
+    archives localJar
+    archives devJar
+    archives sitJar
+    archives sit2Jar
+//    archives uatJar
+//    archives prodJar
+}
+
