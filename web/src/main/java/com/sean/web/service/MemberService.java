@@ -18,14 +18,14 @@ public class MemberService {
 
     private final MemberDao memberDao;
 
-    public MemberService(@Qualifier("memberSQL") MemberDao memberDao) {
+    public MemberService(@Qualifier("memberJPA") MemberDao memberDao) {
         this.memberDao = memberDao;
     }
 
     public MemberDetailVO getMember(Integer memberId) {
+
         MemberDetailVO memberDetailVO = null;
         try {
-
             if (null != memberId) {
                 MemberEntity member = memberDao.getMember(memberId);
                 memberDetailVO = new MemberDetailVO();
@@ -51,6 +51,7 @@ public class MemberService {
 
     public void updateMember(MemberEntity member) {
         member.setUpdateUser("ADMIN123");
+        member.getDepartment().setCreateUser("ADMIN123");
         memberDao.updateMember(member);
     }
 

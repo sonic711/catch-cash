@@ -1,12 +1,15 @@
 package com.sean.model.entities;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
+import org.hibernate.annotations.Comment;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,11 +20,11 @@ import lombok.ToString;
 @Table(name = "MEMBER")
 @Entity
 @ToString
-@AttributeOverrides({ // todo 解決排序問題
-		@AttributeOverride(name = "createUser", column = @Column(name = "CREATOR")),//
-		@AttributeOverride(name = "createTime", column = @Column(name = "CREATETIME")),//
-		@AttributeOverride(name = "updateUser", column = @Column(name = "MODIFIER")), //
-		@AttributeOverride(name = "updateTime", column = @Column(name = "LASTUPDATE")) })
+//@AttributeOverrides({ // todo 解決排序問題
+//		@AttributeOverride(name = "createUser", column = @Column(name = "CREATOR")),//
+//		@AttributeOverride(name = "createTime", column = @Column(name = "CREATETIME")),//
+//		@AttributeOverride(name = "updateUser", column = @Column(name = "MODIFIER")), //
+//		@AttributeOverride(name = "updateTime", column = @Column(name = "LASTUPDATE")) })
 public class MemberEntity extends GenericEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 使用資料庫自動增加策略
@@ -37,4 +40,10 @@ public class MemberEntity extends GenericEntity {
 	private String password;
 	@Column(name = "IMAGE", columnDefinition = "varbinary(max)")
 	private byte[] profileImage;
+
+	@ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE,CascadeType.REMOVE })
+	@JoinColumn(name = "D_OID", referencedColumnName = "ID")
+	@Comment(value = "部門名稱")
+	@ToString.Exclude
+	private DepartmentEntity department;
 }

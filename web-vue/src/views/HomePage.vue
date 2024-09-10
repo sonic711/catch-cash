@@ -62,8 +62,15 @@ const login = async () => {
   ruleFormRef.value?.validate(async (valid: any) => {
     if (valid) {
       // todo: 登入動作
-      await axios.get('http://127.0.0.1:9090/catch-cash/sys/login').then(res => {
-        console.log(res)
+      const data = {
+        "email": pageObj.form.account,
+        "password": pageObj.form.password
+      }
+      await axios.post('http://127.0.0.1:9090/sys/login', data).then(res => {
+        console.log(res.data)
+        // console.log(res.data.code)
+        // console.log(res.data.message)
+        // console.log(res.data.data)
       });
     }
   })

@@ -3,8 +3,6 @@ package com.sean.web.controller;
 import java.util.Base64;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,14 +30,12 @@ import lombok.RequiredArgsConstructor;
 import static com.sean.web.api.ApiPathConstant.BASE_PATH;
 import static com.sean.web.api.ApiSettingConstant.JPEG;
 
-
 @RestController
 @RequestMapping(value = BASE_PATH + "/member")
 @RequiredArgsConstructor
 @Tag(name = "Member")
 public class MemberController {
 
-	private static final Logger log = LoggerFactory.getLogger(MemberController.class);
 	private final MemberService mainService;
 
 	// get 查詢 Member 資料
@@ -56,7 +52,8 @@ public class MemberController {
 	// get 查詢 Member 資料
 	@GetMapping
 	public List<MemberEntity> getMembers() {
-		return mainService.getMembers();
+		List<MemberEntity> members = mainService.getMembers();
+		return members;
 	}
 
 	@Operation(summary = "Create Member",//
@@ -68,8 +65,9 @@ public class MemberController {
 		MemberEntity memberEntity = new MemberEntity();
 		// 前端傳進來為Base64編碼的圖片，需將其轉換為byte[]存入資料庫
 		BeanUtils.copyProperties(member, memberEntity);
-		memberEntity.setProfileImage(Base64.getDecoder().decode(member.getProfileImage().split(",")[1]));
-
+		if (null != member.getProfileImage()) {
+			memberEntity.setProfileImage(Base64.getDecoder().decode(member.getProfileImage().split(",")[1]));
+		}
 		mainService.saveMember(memberEntity);
 	}
 

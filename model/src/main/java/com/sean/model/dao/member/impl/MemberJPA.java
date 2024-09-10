@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,5 +78,12 @@ public class MemberJPA implements MemberDao {
 			file = dbMember.get().getProfileImage();
 		}
 		return file;
+	}
+
+	public List<MemberEntity> getMembersByFilter(MemberEntity filter) {
+		ExampleMatcher matcher = ExampleMatcher.matching()//
+				.withIgnorePaths()//
+				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+		return memberRepo.findAll(Example.of(filter, matcher));
 	}
 }

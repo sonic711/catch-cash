@@ -15,6 +15,7 @@ public class ExternalApiService {
     public MemberExternalVO getExternalDataStore() {
         MemberExternalVO forObject = null;
         try {
+            // https://jsonplaceholder.typicode.com/users 作業用
             forObject = (MemberExternalVO) restTemplateService.getJsonObject("https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-020001-kvg", MemberExternalVO.class);
         } catch (Exception e) {
             log.error("getExternalData error", e);

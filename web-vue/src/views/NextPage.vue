@@ -29,7 +29,7 @@
         <el-col :span="12">
           <el-form-item label="帳號" prop="account">
             <el-input
-                v-model="pageObj.form.account"
+                v-model="pageObj.form.name"
                 style="width: 240px"
                 placeholder="請輸入帳號"/>
           </el-form-item>
@@ -45,8 +45,8 @@
     <div class="query-result">
       <div v-if="hasData">
         <el-table v-loading="loading" :data="pageObj.members" border stripe>
-          <el-table-column label="帳號" prop="account"/>
-          <el-table-column label="密碼" prop="pwd"/>
+          <el-table-column label="帳號" prop="name"/>
+          <el-table-column label="密碼" prop="password"/>
         </el-table>
       </div>
       <div v-else>
@@ -69,7 +69,7 @@ const router = useRouter()
 const pageDataStore = usePageDataStore();
 const pageObj = reactive({
   form: {
-    account: ''
+    name: ''
   },
   members: [] as any[],
   msg: 'Hello world',
@@ -96,8 +96,8 @@ const getMembers = () => {
 }
 const query = async () => {
   pageObj.members.some(item => {
-    if (item.account === pageObj.form.account) {
-      ElMessageBox.alert(item.message, {
+    if (item.name === pageObj.form.name) {
+      ElMessageBox.alert("帳號存在", {
         confirmButtonText: '確定',
         callback: () => {
 
