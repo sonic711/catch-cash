@@ -2,6 +2,7 @@ package com.sean.web.service;
 
 import com.sean.model.dao.member.MemberDao;
 import com.sean.model.entities.MemberEntity;
+import com.sean.web.vo.BasicOut;
 import com.sean.web.vo.MemberDetailVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -22,8 +23,8 @@ public class MemberService {
         this.memberDao = memberDao;
     }
 
-    public MemberDetailVO getMember(Integer memberId) {
-
+    public BasicOut<MemberDetailVO> getMember(Integer memberId) {
+        BasicOut<MemberDetailVO> result = new BasicOut<>();
         MemberDetailVO memberDetailVO = null;
         try {
             if (null != memberId) {
@@ -37,11 +38,14 @@ public class MemberService {
         } catch (Exception e) {
             log.error("getMember error", e);
         }
-        return memberDetailVO;
+        result.setData(memberDetailVO);
+        return result;
     }
 
-    public List<MemberEntity> getMembers() {
-        return memberDao.getMembers();
+    public BasicOut<List<MemberEntity>> getMembers() {
+        BasicOut<List<MemberEntity>> result = new BasicOut<>();
+        result.setData(memberDao.getMembers());
+        return result;
     }
 
     public void saveMember(MemberEntity member) {

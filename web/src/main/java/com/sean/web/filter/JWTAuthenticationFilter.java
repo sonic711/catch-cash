@@ -47,21 +47,23 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 		log.info("JWTAuthenticationFilter.doFilterInternal 請求方法");
 		BasicOut<String> result = new BasicOut<>();
 		try {
-			String jwtToken = request.getHeader("X-Access-Token");
-			if (StringUtils.isEmpty(jwtToken) && request.getRequestURI().contains(ApiPathConstant.SYS_PATH)) {
-				filterChain.doFilter(request, response);
-				return;
-			}
-			BasicOut<Boolean> validateToken = ssoAuthService.validateToken(jwtToken);
-			if (!validateToken.getData()) {
-				// 驗證成功
+			if (!StringUtils.equalsIgnoreCase("OPTIONS", request.getMethod())) {
+				String jwtToken = request.getHeader("x-access-token");
+				if (StringUtils.isEmpty(jwtToken) && request.getRequestURI().contains(ApiPathConstant.SYS_PATH)) {
+					filterChain.doFilter(request, response);
+					return;
+				}
+				BasicOut<Boolean> validateToken = ssoAuthService.validateToken(jwtToken);
+				if (!validateToken.getData()) {
+					// 驗證成功
 
-			} else {
-				result.setCode(validateToken.getCode());
-				result.setStatus(ProcessStatusEnum.ERROR.getStatus());
-				result.setMessage(validateToken.getMessage());
-				mapper.writeValue(response.getWriter(), result);
-				return;
+				} else {
+					result.setCode(validateToken.getCode());
+					result.setStatus(ProcessStatusEnum.ERROR.getStatus());
+					result.setMessage(validateToken.getMessage());
+					mapper.writeValue(response.getWriter(), result);
+					return;
+				}
 			}
 			filterChain.doFilter(request, response);
 		} catch (Exception e) {
@@ -81,8 +83,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 			String resUrl = request.getRequestURI();
 			int start = resUrl.indexOf(ApiPathConstant.BASE_PATH) + ApiPathConstant.BASE_PATH.length();
 			String path = resUrl.substring(start);
-			// 排除非 等於 /demo, /sys ,/common ,/mail/notify，skip filter
-			if (!whiteList.stream().anyMatch(item -> path.contains(item))) {
+			// 排除非 等於 /sys，skip filter
+			if (whiteList.stream().noneMatch(path::contains)) {
 				log.debug("path : " + path);
 				skipFilter = false;
 			}

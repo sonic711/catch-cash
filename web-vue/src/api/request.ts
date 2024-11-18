@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type {AxiosInstance, AxiosResponse} from 'axios';
+import {ElMessageBox} from "element-plus";
 
 class ApiService {
     private axiosInstance: AxiosInstance;
@@ -11,6 +12,16 @@ class ApiService {
             withCredentials: false
         });
 
+        // 添加 request 攔截器以添加 X-Access-Token 標頭
+        this.axiosInstance.interceptors.request.use(config => {
+            const token = localStorage.getItem('X-Access-Token'); // 假設從 localStorage 獲取 token
+            if (token) {
+                config.headers['X-Access-Token'] = token;
+            }
+            return config;
+        });
+
+        // 添加 response 攔截器
         this.axiosInstance.interceptors.response.use(
             this.handleSuccess,
             this.handleError
@@ -18,7 +29,15 @@ class ApiService {
     }
 
     private handleSuccess(response: AxiosResponse) {
-        return response;
+        if(response.data.code === 50003){
+            ElMessageBox.alert('Token 失效，請重新登入', '錯誤', {
+                confirmButtonText: '確定',
+                callback: () => {
+                    location.replace("/")
+                },
+            }).then(r => location.replace("/"))
+        }
+        return response.data;
     }
 
     private handleError(error: any) {

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sean.model.entities.MemberEntity;
 import com.sean.web.service.MemberService;
+import com.sean.web.vo.BasicOut;
 import com.sean.web.vo.MemberDetailVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,15 +46,14 @@ public class MemberController {
 			parameters = { @Parameter(name = "memberId", description = "會員編號", required = true, example = "1") },//
 			responses = { @ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Not Found") })//
 	@GetMapping(value = "/{memberId}")
-	public MemberDetailVO getMember(@PathVariable Integer memberId) {
+	public BasicOut<MemberDetailVO> getMember(@PathVariable Integer memberId) {
 		return mainService.getMember(memberId);
 	}
 
 	// get 查詢 Member 資料
 	@GetMapping
-	public List<MemberEntity> getMembers() {
-		List<MemberEntity> members = mainService.getMembers();
-		return members;
+	public BasicOut<List<MemberEntity>> getMembers() {
+		return mainService.getMembers();
 	}
 
 	@Operation(summary = "Create Member",//

@@ -39,15 +39,15 @@ import {useRoute, useRouter} from "vue-router";
 import {usePageDataStore} from "@/stores/counter";
 import {reactive, ref} from "vue";
 import type {FormInstance, FormRules} from "element-plus";
-import axios from "axios";
+import ApiService from "@/api/request";
 
 const route = useRoute()
 const router = useRouter()
 const pageDataStore = usePageDataStore();
 const pageObj = reactive({
   form: {
-    account: '',
-    password: ''
+    account: 'SeanLiu',
+    password: 'password'
   },
 })
 // 響應式物件
@@ -63,15 +63,14 @@ const login = async () => {
     if (valid) {
       // todo: 登入動作
       const data = {
-        "email": pageObj.form.account,
+        "name": pageObj.form.account,
         "password": pageObj.form.password
       }
-      await axios.post('http://127.0.0.1:9090/sys/login', data).then(res => {
-        console.log(res.data)
-        // console.log(res.data.code)
-        // console.log(res.data.message)
-        // console.log(res.data.data)
-      });
+      const res = await ApiService.post('/sys/login', data) as any;
+      // 儲存 access_token
+      localStorage.setItem('X-Access-Token', res.accessToken)
+      // 導向首頁
+      await router.push('/about')
     }
   })
 }
