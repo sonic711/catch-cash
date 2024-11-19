@@ -55,7 +55,7 @@ public class MemberService {
 
     public void updateMember(MemberEntity member) {
         member.setUpdateUser("ADMIN123");
-        member.getDepartment().setCreateUser("ADMIN123");
+//        member.getDepartment().setCreateUser("ADMIN123");
         memberDao.updateMember(member);
     }
 

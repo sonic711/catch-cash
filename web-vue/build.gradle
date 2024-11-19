@@ -92,7 +92,7 @@ yarn_build_local {
     dependsOn 'yarn'
     doLast {
         copy {
-            from 'dist/fsap-admin'
+            from 'dist'
             into 'build/localJar'
         }
     }

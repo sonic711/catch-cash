@@ -4,6 +4,8 @@ repositories {
 
 dependencies {
     api('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     // https://mvnrepository.com/artifact/com.twitter/maple
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'

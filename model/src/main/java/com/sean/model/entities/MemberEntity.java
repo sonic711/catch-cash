@@ -38,12 +38,13 @@ public class MemberEntity extends GenericEntity {
 	private String email;
 	@Column(name = "PASSWORD")
 	private String password;
-	@Column(name = "IMAGE", columnDefinition = "varbinary(max)")
+//	@Column(name = "IMAGE", columnDefinition = "varbinary(max)")
+	@Column(name = "IMAGE", columnDefinition = "blob")
 	private byte[] profileImage;
 
-	@ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE,CascadeType.REMOVE })
-	@JoinColumn(name = "D_OID", referencedColumnName = "ID")
-	@Comment(value = "部門名稱")
-	@ToString.Exclude
-	private DepartmentEntity department;
+//	@ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE,CascadeType.REMOVE })
+//	@JoinColumn(name = "D_OID", referencedColumnName = "ID")
+//	@Comment(value = "部門名稱")
+//	@ToString.Exclude
+//	private DepartmentEntity department;
 }

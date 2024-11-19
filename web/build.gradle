@@ -6,7 +6,14 @@ def activeProfile = System.getProperty("env", project.hasProperty("profile") ? p
 dependencies {
     // include the model project
     implementation project(':model')
-    api project(path: ':web-vue', configuration: activeProfile)
+//    api project(path: ':web-vue', configuration: activeProfile)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    api (
+
+            "io.jsonwebtoken:jjwt-api:0.11.5",
+            "io.jsonwebtoken:jjwt-impl:0.11.5",
+            "io.jsonwebtoken:jjwt-jackson:0.11.5"
+    )
     // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
     implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.2.1'
     // gson

@@ -1,12 +1,9 @@
 package com.sean.web.service;
 
-import java.io.IOException;
-
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import com.sean.model.entities.DepartmentEntity;
 import com.sean.model.entities.MemberEntity;
 import com.sean.model.repo.MemberRepo;
 
@@ -23,21 +20,21 @@ public class InitalDataService {
 	@EventListener(ApplicationReadyEvent.class)
 	public void doForDbInitialData() {
 		initMemberData();
-
 	}
 
 	private void initMemberData() {
-		if(memberRepo.count() == 0){
+		if (memberRepo.count() == 0) {
 			MemberEntity member = new MemberEntity();
 			member.setName("ADMIN");
-			member.setEmail("123");
+			//			member.setEmail("123");
 			member.setPassword("ADMIN");
 			member.setCreateUser("initial");
-//			DepartmentEntity department = new DepartmentEntity();
-//			department.setDName("台積電");
-//			department.setCreateUser("initial");
-//			member.setDepartment(department);
+			//			DepartmentEntity department = new DepartmentEntity();
+			//			department.setDName("台積電");
+			//			department.setCreateUser("initial");
+			//			member.setDepartment(department);
 			memberRepo.save(member);
 		}
 	}
+
 }
