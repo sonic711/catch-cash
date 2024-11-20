@@ -27,6 +27,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import static com.sean.web.api.ApiPathConstant.BASE_PATH;
 import static com.sean.web.api.ApiSettingConstant.JPEG;
@@ -35,7 +36,8 @@ import static com.sean.web.api.ApiSettingConstant.JPEG;
 @RequestMapping(value = BASE_PATH + "/member")
 @RequiredArgsConstructor
 @Tag(name = "Member")
-public class MemberController {
+@Slf4j
+public class MemberController extends CommonWebController{
 
 	private final MemberService mainService;
 
@@ -68,12 +70,14 @@ public class MemberController {
 		if (null != member.getProfileImage()) {
 			memberEntity.setProfileImage(Base64.getDecoder().decode(member.getProfileImage().split(",")[1]));
 		}
+		memberEntity.setCreateUser(getUserInfo().getUserName());
 		mainService.saveMember(memberEntity);
 	}
 
 	@Operation(summary = "Update Member", description = "更新會員資料", tags = { "Member" }, requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "會員資料", required = true, content = @Content(mediaType = "application/json", schema = @Schema(implementation = MemberEntity.class))), responses = { @ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "400", description = "Bad Request") })
 	@PutMapping
 	public void updateMember(@RequestBody MemberEntity member) {
+		member.setCreateUser(getUserInfo().getUserName());
 		mainService.updateMember(member);
 	}
 

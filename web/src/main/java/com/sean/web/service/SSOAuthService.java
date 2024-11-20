@@ -41,7 +41,6 @@ public class SSOAuthService {
 	 * @param
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public UserInfo getUserProfile(String token) {
 		UserInfo info = new UserInfo();
 		Claims claims = TokenUtils.parseJWT(jwtKey, token);

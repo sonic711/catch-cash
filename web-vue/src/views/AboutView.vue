@@ -213,8 +213,7 @@ const submitForm = () => {
         profileImage: pageObj.form.img,
       }
       console.log(data)
-      await axios.post('http://127.0.0.1:9090/catch-cash/api/member', data).then(res => {
-        console.log(res)
+      await ApiService.post('/api/member', data).then(res => {
         queryMembers()
       });
     } else {
@@ -277,8 +276,7 @@ const onFileChange = (e: any) => {
 
 const remove = async (row: any, index: number) => {
   // pageObj.members.splice(index, 1)
-  await axios.delete(`http://127.0.0.1:9090/catch-cash/api/member/${row.id}`).then(res => {
-    console.log(res)
+  await ApiService.delete(`/api/member/${row.id}`).then(res => {
     queryMembers()
   });
 }

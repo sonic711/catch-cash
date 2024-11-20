@@ -8,7 +8,7 @@ class ApiService {
     constructor() {
         this.axiosInstance = axios.create({
             baseURL: 'http://127.0.0.1:9090/catch-cash',
-            timeout: 10000,
+            timeout: 60000,
             withCredentials: false
         });
 
@@ -29,7 +29,7 @@ class ApiService {
     }
 
     private handleSuccess(response: AxiosResponse) {
-        if(response.data.code === 50003){
+        if (response.data.code === 50003) {
             ElMessageBox.alert('Token 失效，請重新登入', '錯誤', {
                 confirmButtonText: '確定',
                 callback: () => {

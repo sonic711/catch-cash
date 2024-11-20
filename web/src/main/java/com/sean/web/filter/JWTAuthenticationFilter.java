@@ -41,7 +41,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 		// response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Access-Control-Allow-Origin", "*"); // 或者指定明確的來源 URL
-		response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+		response.setHeader("Access-Control-Allow-Methods", "*");
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Access-Token");
 		response.setHeader("Access-Control-Expose-Headers", "Content-Disposition, Cache-Control, Content-Type");
 		log.info("JWTAuthenticationFilter.doFilterInternal 請求方法");

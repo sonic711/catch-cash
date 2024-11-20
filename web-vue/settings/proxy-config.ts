@@ -1,15 +1,15 @@
 const proxyConfigMappings: Record<ProxyType, ProxyConfig> = {
   dev: {
     prefix: '/api',
-    target: 'http://localhost:8080',
+    target: 'http://localhost:9090',
   },
   test: {
     prefix: '/api',
-    target: 'http://localhost:8080',
+    target: 'http://localhost:9090',
   },
   prod: {
     prefix: '/api',
-    target: 'http://localhost:8080',
+    target: 'http://localhost:9090',
   },
 }
 
