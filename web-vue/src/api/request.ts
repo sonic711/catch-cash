@@ -33,9 +33,9 @@ class ApiService {
             ElMessageBox.alert('Token 失效，請重新登入', '錯誤', {
                 confirmButtonText: '確定',
                 callback: () => {
-                    location.replace("/")
+                    location.replace("/catch-cash/")
                 },
-            }).then(r => location.replace("/"))
+            }).then(r => location.replace("/catch-cash/"))
         }
         return response.data;
     }

@@ -6,7 +6,10 @@ def activeProfile = System.getProperty("env", project.hasProperty("profile") ? p
 dependencies {
     // include the model project
     implementation project(':model')
-//    api project(path: ':web-vue', configuration: activeProfile)
+
+    if (activeProfile != 'local') {
+        api project(path: ':web-vue', configuration: activeProfile)
+    }
     implementation 'org.springframework.boot:spring-boot-starter-web'
     api (
 

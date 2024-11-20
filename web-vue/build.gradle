@@ -108,7 +108,7 @@ yarn_build_dev {
     dependsOn 'yarn'
     doLast {
         copy {
-            from 'dist/fsap-admin'
+            from 'dist/catch-cash'
             into 'build/devJar'
         }
     }
@@ -124,7 +124,7 @@ yarn_build_sit {
     dependsOn 'yarn'
     doLast {
         copy {
-            from 'dist/fsap-admin'
+            from 'dist/catch-cash'
             into 'build/sitJar'
         }
     }
