@@ -17,7 +17,7 @@
 import {reactive} from "vue";
 
 const pageObj = reactive({
-  msg:'',
+  msg: '',
 })
 
 const prop = defineProps({

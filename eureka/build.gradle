@@ -1,0 +1,5 @@
+allprojects {
+    // disable assemble
+    jar.enabled = false
+    bootJar.enabled = false
+}

@@ -1,18 +1,34 @@
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.2.4'
-    id 'io.spring.dependency-management' version '1.1.4'
-}
 
 group = 'com.sean'
 version = '0.0.1'
 
-java {
-    sourceCompatibility = '17'
-}
-
-repositories {
-    mavenCentral()
+buildscript {
+    apply from: "${rootProject.projectDir}/version.gradle"
+    repositories {
+        flatDir { dirs "$rootProject.projectDir/libs" }
+        mavenCentral()
+        mavenLocal()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath(
+                "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}",
+                // http://github.com/jeremylong/DependencyCheck
+                'org.owasp:dependency-check-gradle:10.0.2',
+                // https://plugins.gradle.org/plugin/org.sonarqube
+                'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929',
+                // https://plugins.gradle.org/plugin/com.github.spotbugs
+                'com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.14',
+                // https://plugins.gradle.org/plugin/io.spring.dependency-management
+                'io.spring.gradle:dependency-management-plugin:1.1.5',
+                // https://plugins.gradle.org/plugin/io.github.thakurvijendar.dependency-license-report
+                'com.github.jk1.dependency-license-report:com.github.jk1.dependency-license-report.gradle.plugin:2.1',
+                // https://plugins.gradle.org/plugin/org.hidetake.ssh
+                'org.hidetake:core:2.11.2',
+        )
+    }
 }
 
 subprojects {
@@ -20,6 +36,11 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+
+    java {
+        sourceCompatibility = jdkVersion
+    }
+
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -27,8 +48,11 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
-//    tasks.named('test') {
-//        useJUnitPlatform()
-//    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
 }
-bootJar.enabled = false
+

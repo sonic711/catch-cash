@@ -30,8 +30,9 @@ public class DepartmentEntity extends GenericEntity {
 	@Column(name = "D_NAME")
 	private String dName;
 
-//	@OneToMany(mappedBy = "department", cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE }, orphanRemoval = true)
-//	@ToString.Exclude
-//	@JsonIgnore
-//	private List<MemberEntity> members;
+	@OneToMany(mappedBy = "department",//
+			cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true)
+	@ToString.Exclude
+	@JsonIgnore
+	private List<MemberEntity> members;
 }

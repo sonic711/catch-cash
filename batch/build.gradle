@@ -1,0 +1,33 @@
+def activeProfile = System.getProperty("env", project.hasProperty("profile") ? project.property("profile") : "local")
+
+dependencies {
+    // include the model project
+//    implementation project(':model')
+    api project(":eureka:eureka-plugin")
+//    implementation project(":eureka:eureka-plugin")
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // gson
+    implementation 'com.google.code.gson:gson:2.8.9'
+    // commons-io
+    implementation 'commons-io:commons-io:2.14.0'
+}
+def profile = project.hasProperty("profile") ? project.property("profile") : "local"
+processResources {
+    filesMatching("application.properties") {
+        expand(["springProfile": profile])
+    }
+    // 過濾 resources
+    include("application.properties")
+    include("application-${profile}.properties")
+    include("logback-spring.xml")
+    include("sql/**")
+}
+jar {
+    enabled = false
+}
+
+bootJar {
+    archiveFileName = "${project.name}.jar"
+    enabled = true
+}

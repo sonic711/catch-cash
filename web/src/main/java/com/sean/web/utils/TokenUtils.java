@@ -17,7 +17,9 @@ public class TokenUtils {
 	 * @return
 	 */
 	public static String createJWT(String secret, Claims claims) {
-		return Jwts.builder().setClaims(claims).signWith(Keys.hmacShaKeyFor(createPadded(secret)), SignatureAlgorithm.HS512).compact();
+		return Jwts.builder()//
+				.setClaims(claims)//
+				.signWith(Keys.hmacShaKeyFor(createPadded(secret)), SignatureAlgorithm.HS512).compact();
 	}
 
 	/**
@@ -38,7 +40,11 @@ public class TokenUtils {
 	 * @return
 	 */
 	public static Claims parseJWT(String secret, String jwt) {
-		return Jwts.parserBuilder().setSigningKey(createPadded(secret)).build().parseClaimsJws(jwt).getBody();
+		return Jwts.parserBuilder()//
+				.setSigningKey(createPadded(secret))//
+				.build()//
+				.parseClaimsJws(jwt)//
+				.getBody();
 	}
 
 }

@@ -1,7 +1,4 @@
-repositories {
-    mavenCentral()
-}
-def activeProfile = System.getProperty("env", project.hasProperty("profile") ? project.property("profile") : "local")
+def activeProfile = System.getProperty('env', 'local')
 
 dependencies {
     // include the model project
@@ -11,8 +8,7 @@ dependencies {
         api project(path: ':web-vue', configuration: activeProfile)
     }
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    api (
-
+    api(
             "io.jsonwebtoken:jjwt-api:0.11.5",
             "io.jsonwebtoken:jjwt-impl:0.11.5",
             "io.jsonwebtoken:jjwt-jackson:0.11.5"
@@ -38,6 +34,11 @@ processResources {
     include("logback-spring.xml")
     include("sql/**")
 }
+
+jar {
+    enabled = false
+}
+
 bootJar {
     archiveFileName = 'web-server.jar'
     enabled = true

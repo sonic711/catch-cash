@@ -65,7 +65,8 @@ public class SSOAuthService {
 		try {
 			claims.setSubject(info.getUserId());
 			// 設定 Token 有效時間
-			claims.setExpiration(Date.from(LocalDateTime.now().plusSeconds(expiration).atZone(ZoneId.systemDefault()).toInstant()));
+			claims.setExpiration(Date.from(LocalDateTime.now()//
+					.plusSeconds(expiration).atZone(ZoneId.systemDefault()).toInstant()));
 			claims.put("userId", info.getUserId());
 			claims.put("userIp", info.getUserIp());
 			claims.put("userName", info.getUserName());

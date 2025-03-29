@@ -1,4 +1,6 @@
 rootProject.name = 'catch-cash'
+include ':eureka:eureka-server', ':eureka:eureka-plugin'
 include ':web', ':web-vue'
 include ':model'
+include ':batch'
 

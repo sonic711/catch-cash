@@ -14,4 +14,5 @@ dependencies {
     // mySQL
     implementation 'mysql:mysql-connector-java:8.0.29'
 }
+
 bootJar.enabled = false
