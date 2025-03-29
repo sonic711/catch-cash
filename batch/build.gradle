@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 def activeProfile = System.getProperty("env", project.hasProperty("profile") ? project.property("profile") : "local")
 
 dependencies {
@@ -12,16 +14,46 @@ dependencies {
     // commons-io
     implementation 'commons-io:commons-io:2.14.0'
 }
-def profile = project.hasProperty("profile") ? project.property("profile") : "local"
+
 processResources {
-    filesMatching("application.properties") {
-        expand(["springProfile": profile])
+    doFirst {
+        println "Active Profile: ${activeProfile}"
+        // 只針對application.properties進行替換
+        filesMatching(["*.properties", "*.yml"]) { file ->
+            println("Processing file: ${file.path}")
+            // 在文件中替換特定的 tokens
+            filter(ReplaceTokens, tokens: [
+                    "spring.active.profiles": activeProfile,
+                    "project.groupId": project.group,
+                    "project.artifactId": project.name,
+                    "project.version": project.version
+            ])
+        }
     }
-    // 過濾 resources
-    include("application.properties")
-    include("application-${profile}.properties")
-    include("logback-spring.xml")
-    include("sql/**")
+
+    // 忽略重複的資源載入
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // 依照所需資源打包至 resources
+    sourceSets {
+        main {
+            resources {
+                include 'codetable/*'
+                include 'META-INF/*'
+                include 'sql/*'
+                include 'spy.properties'
+                include 'application-actuator.yml'
+                include 'application-info.yml'
+            }
+        }
+    }
+
+    def environments = ['local']
+
+    if (environments.contains(activeProfile)) {
+        from "src/main/resources/application.properties"
+        into 'src/main/resources/'
+    }
 }
 jar {
     enabled = false

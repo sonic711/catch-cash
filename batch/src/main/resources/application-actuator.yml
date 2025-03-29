@@ -1,0 +1,21 @@
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+    shutdown:
+      enabled: false
+  health:
+    ldap:
+      enabled: false
+
+info:
+  app:
+    name: @project.artifactId@

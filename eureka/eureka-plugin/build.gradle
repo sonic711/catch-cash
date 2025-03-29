@@ -1,5 +1,10 @@
 
 dependencies {
+    implementation "org.springframework:spring-web"
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
 }
 
+jar {
+    enabled = true
+}
