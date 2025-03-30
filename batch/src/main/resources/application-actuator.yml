@@ -3,10 +3,11 @@ management:
     env:
       enabled: true
   endpoints:
-    enabled-by-default: true
     web:
       exposure:
         include: "*"
+    access:
+      default: read_only
   endpoint:
     health:
       show-details: ALWAYS

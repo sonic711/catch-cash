@@ -3,16 +3,13 @@ import org.apache.tools.ant.filters.ReplaceTokens
 def activeProfile = System.getProperty("env", project.hasProperty("profile") ? project.property("profile") : "local")
 
 dependencies {
-    // include the model project
-//    implementation project(':model')
+
+    api project(":model")
     api project(":eureka:eureka-plugin")
-//    implementation project(":eureka:eureka-plugin")
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    // gson
-    implementation 'com.google.code.gson:gson:2.8.9'
-    // commons-io
-    implementation 'commons-io:commons-io:2.14.0'
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    implementation("com.h2database:h2:2.3.232")
 }
 
 processResources {
@@ -24,9 +21,9 @@ processResources {
             // 在文件中替換特定的 tokens
             filter(ReplaceTokens, tokens: [
                     "spring.active.profiles": activeProfile,
-                    "project.groupId": project.group,
-                    "project.artifactId": project.name,
-                    "project.version": project.version
+                    "project.groupId"       : project.group,
+                    "project.artifactId"    : project.name,
+                    "project.version"       : project.version
             ])
         }
     }

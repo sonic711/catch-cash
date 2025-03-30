@@ -18,10 +18,13 @@ public class Client {
 
 	private final EurekaClient eurekaClient;
 
-	public void getInstances() {
+	@SuppressWarnings("unchecked")
+	public void getInstances(String serviceName) {
 		log.info("Getting instances from eureka server");
 		List<Application> registeredApplications = eurekaClient.getApplications().getRegisteredApplications();
-		List<InstanceInfo> infos = this.eurekaClient.getInstancesByVipAddress("batch", false);
-
+		List<InstanceInfo> instancesById = eurekaClient.getInstancesById(serviceName);
+		
 	}
 }
+
+

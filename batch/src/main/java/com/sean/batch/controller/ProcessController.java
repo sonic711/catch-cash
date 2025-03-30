@@ -1,5 +1,6 @@
 package com.sean.batch.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sean.batch.service.BtService;
 import com.sean.batch.service.ServiceExecutor;
 import com.sean.batch.vo.InputVO;
 
@@ -18,11 +18,9 @@ import com.sean.batch.vo.InputVO;
 public class ProcessController {
 
 	private final ServiceExecutor serviceExecutor;
-	private final List<BtService> services;
 
-	public ProcessController(ServiceExecutor serviceExecutor, List<BtService> services) {
+	public ProcessController(ServiceExecutor serviceExecutor) {
 		this.serviceExecutor = serviceExecutor;
-		this.services = services;
 	}
 
 	@PostMapping("/start")
@@ -33,7 +31,7 @@ public class ProcessController {
 
 	@GetMapping("/start")
 	public String startProcess() {
-		//		serviceExecutor.executeServices(new InputVO(), BtService);
+		serviceExecutor.executeServices(new InputVO(), new ArrayList<>());
 		return "Process completed.";
 	}
 }

@@ -10,15 +10,6 @@ import jakarta.annotation.PreDestroy;
 @Service("BT002")
 public class BT002Service implements BtService {
 
-	@PostConstruct
-	public void init() {
-		System.out.println("Initializing BT002Service");
-	}
-
-	@PreDestroy
-	public void destroy() {
-		System.out.println("Destroying BT002Service");
-	}
 
 	@Override
 	public void execute(InputVO input) {

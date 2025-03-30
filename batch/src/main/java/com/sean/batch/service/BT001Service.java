@@ -1,24 +1,18 @@
 package com.sean.batch.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.sean.batch.vo.InputVO;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
+import com.sean.model.dao.member.MemberDao;
 
 @Service("BT001")
 public class BT001Service implements BtService {
 
-	@PostConstruct
-	public void init() {
-		System.out.println("Initializing BT001Service");
-	}
-
-	@PreDestroy
-	public void destroy() {
-		System.out.println("Destroying BT001Service");
-	}
+	@Qualifier("memberJPA")
+	@Autowired
+	private MemberDao memberDao;
 
 	@Override
 	public void execute(InputVO input) {
