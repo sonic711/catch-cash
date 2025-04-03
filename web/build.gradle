@@ -14,17 +14,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
     implementation 'org.aspectj:aspectjweaver'
+
     api(
             "io.jsonwebtoken:jjwt-api:0.11.5",
             "io.jsonwebtoken:jjwt-impl:0.11.5",
             "io.jsonwebtoken:jjwt-jackson:0.11.5"
     )
+
     // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
     implementation 'org.apache.httpcomponents.client5:httpclient5'
-
-
     // gson
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson'
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
     // jasypt
@@ -61,6 +61,7 @@ processResources {
                 include("application-${profile}.properties")
                 include("application-actuator.yml")
                 include("application-eureka.yml")
+                include("application-info.yml")
                 include("logback-spring.xml")
                 include("sql/**")
             }

@@ -16,7 +16,3 @@ management:
   health:
     ldap:
       enabled: false
-
-info:
-  app:
-    name: @project.artifactId@

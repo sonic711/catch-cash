@@ -1,7 +1,6 @@
 ext {
     // BASE
     jdkVersion = JavaVersion.VERSION_17
-    gradleWrapperVersion = '8.6'
 
     try {
         gitVersion = 'git version'.execute().text.trim()

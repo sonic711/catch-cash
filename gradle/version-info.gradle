@@ -1,0 +1,160 @@
+import org.gradle.internal.logging.text.StyledTextOutputFactory
+
+import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
+import static org.gradle.internal.logging.text.StyledTextOutput.Style
+
+def out = services.get(StyledTextOutputFactory).create("")
+
+def buildDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(ZonedDateTime.now())
+def apiVersion = project.version
+
+jar {
+    doLast {
+        out.withStyle(Style.Info).println """\
+            Module Name: ${project.name}
+            File : ${archiveFile.get().asFile.name}
+            Path : ${archiveFile.get().asFile.path}
+            Build Number: ${System.getenv('BUILD_NUNBER') ?: 'Local'}
+            Git Revision: $gitRevision
+            Git Branch: $gitBranch
+            Build Time: $buildDate
+            Version: $version
+        """
+    }
+
+    if (!rootProject.name.equals(project.parent.name))
+        archivesBaseName = project.parent.name + '-' + project.name
+
+    archiveVersion = rootProject.version
+    manifest {
+        attributes(
+                'Created-By'          : "Gradle ${gradle.gradleVersion}",
+                'Built-By'            : System.properties['user.name'],
+                'Build-Timestamp': new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                'Build-Jdk'           : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                'Build-OS'            : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+                "Git-Revision"        : gitRevision,
+                "Git-Branch"          : gitBranch
+        )
+    }
+}
+
+if (project.hasProperty('bootJar')) {
+    bootJar {
+        doLast {
+            out.withStyle(Style.Info).println """\
+                Module Name: ${project.name}
+                File : ${archiveFile.get().asFile.name}
+                Path : ${archiveFile.get().asFile.path}
+                Build Number: ${System.getenv('BUILD_NUNBER') ?: 'Local'}
+                Git Revision: $gitRevision
+                Git Branch: $gitBranch
+                Build Time: $buildDate
+                Version: $version
+            """
+        }
+        archiveBaseName = project.name
+        archiveVersion = rootProject.version
+        manifest {
+            attributes(
+                    'Created-By'          : "Gradle ${gradle.gradleVersion}",
+                    'Built-By'            : System.properties['user.name'],
+                    'Build-Timestamp': new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                    'Build-Jdk'           : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                    'Build-OS'            : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+                    "Git-Revision"        : gitRevision,
+                    "Git-Branch"          : gitBranch
+            )
+        }
+    }
+}
+
+if (project.hasProperty('bootWar')) {
+    bootWar {
+        doLast {
+            out.withStyle(Style.Info).println """\
+                Module Name: ${project.name}
+                File : ${archiveFile.get().asFile.name}
+                Path : ${archiveFile.get().asFile.path}
+                Build Number: ${System.getenv('BUILD_NUNBER') ?: 'Local'}
+                Git Revision: $gitRevision
+                Git Branch: $gitBranch
+                Build Time: $buildDate
+                Version: $version
+            """
+        }
+        archiveBaseName = project.name
+        archiveVersion = rootProject.version
+        manifest {
+            attributes(
+                    'Created-By'          : "Gradle ${gradle.gradleVersion}",
+                    'Built-By'            : System.properties['user.name'],
+                    'Build-Timestamp': new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                    'Build-Jdk'           : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                    'Build-OS'            : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+                    "Git-Revision"        : gitRevision,
+                    "Git-Branch"          : gitBranch
+            )
+        }
+    }
+}
+
+if (project.hasProperty('war')) {
+    war {
+        doLast {
+            out.withStyle(Style.Info).println """\
+                Module Name: ${project.name}
+                File : ${archiveFile.get().asFile.name}
+                Path : ${archiveFile.get().asFile.path}
+                Build Number: ${System.getenv('BUILD_NUNBER') ?: 'Local'}
+                Git Revision: $gitRevision
+                Git Branch: $gitBranch
+                Build Time: $buildDate
+                Version: $version
+            """
+        }
+        archiveBaseName = project.name
+        archiveVersion = rootProject.version
+        manifest {
+            attributes(
+                    'Created-By'          : "Gradle ${gradle.gradleVersion}",
+                    'Built-By'            : System.properties['user.name'],
+                    'Build-Timestamp': new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                    'Build-Jdk'           : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                    'Build-OS'            : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+                    "Git-Revision"        : gitRevision,
+                    "Git-Branch"          : gitBranch
+            )
+        }
+    }
+}
+
+processResources {
+    filesMatching(['**/application-info.yml', '**/application-info.properties']) {
+        expand([
+                'buildNumber': System.getenv('GO_PIPELINE_LABEL') ?: 'Local',
+                'gitRevision': gitRevision,
+                'gitBranch'  : gitBranch,
+                'buildTime'  : buildDate,
+                'apiVersion' : apiVersion,
+                'projectName': project.name
+        ])
+    }
+}
+
+processTestResources {
+    filesMatching(['**/application-info.yml', '**/application-info.properties']) {
+        expand([
+                'buildNumber': System.getenv('GO_PIPELINE_LABEL') ?: 'Local',
+                'gitRevision': gitRevision,
+                'gitBranch'  : gitBranch,
+                'buildTime'  : buildDate,
+                'apiVersion' : apiVersion,
+                'projectName': project.name
+        ])
+    }
+}
+

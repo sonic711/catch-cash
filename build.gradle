@@ -1,7 +1,3 @@
-
-group = 'com.sean'
-version = '0.0.1'
-
 buildscript {
     apply from: "${rootProject.projectDir}/version.gradle"
     repositories {
@@ -33,12 +29,24 @@ buildscript {
     }
 }
 
+ext {
+    gitRevision = "git describe --tags --exact-match".execute().text.trim()
+    if (gitRevision.isEmpty()) {
+        gitRevision = "git rev-parse HEAD".execute().text.trim()
+    }
+    gitBranch = "git rev-parse --abbrev-ref HEAD".execute().text.trim()
+    gitUrl = "git remote get-url --push origin".execute().text.trim()
+    gitUserEmail = "git config user.email".execute().text.trim()
+    gitUserName = "git config user.name".execute().text.trim()
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'com.gorylenko.gradle-git-properties'
+    apply from: "${rootProject.projectDir}/gradle/version-info.gradle"
 
     java {
         sourceCompatibility = jdkVersion

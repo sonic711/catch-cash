@@ -1,0 +1,14 @@
+# eureka info
+info:
+  app:
+    name: @project.artifactId@
+    buildNumber: ${buildNumber?:Undefined}
+    buildTime: ${buildTime?:Undefined}
+    gitRevision: ${gitRevision?:Undefined}
+    gitBranch: ${gitBranch?:Undefined}
+    apiVersion: ${apiVersion?:Undefined}
+
+  build:
+    groupId: @project.groupId@
+    artifactId: @project.artifactId@
+    version: @project.version@
