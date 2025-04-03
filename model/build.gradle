@@ -3,16 +3,22 @@ repositories {
 }
 
 dependencies {
+    api 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter'
 
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    api 'org.springframework.boot:spring-boot-starter-jdbc'
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    api("com.fasterxml.jackson.core:jackson-annotations:2.18.3")
     // https://mvnrepository.com/artifact/com.twitter/maple
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
     // https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
     runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
     // mySQL
     runtimeOnly 'mysql:mysql-connector-java:8.0.29'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+
 }
 
 bootJar.enabled = false

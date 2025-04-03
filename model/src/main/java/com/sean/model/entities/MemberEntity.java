@@ -38,8 +38,8 @@ public class MemberEntity extends GenericEntity {
 	private String email;
 	@Column(name = "PASSWORD")
 	private String password;
-	@Column(name = "IMAGE", columnDefinition = "varbinary(max)")
-	//	@Column(name = "IMAGE", columnDefinition = "blob")
+//	@Column(name = "IMAGE", columnDefinition = "varbinary(max)")
+		@Column(name = "IMAGE", columnDefinition = "blob")
 	private byte[] profileImage;
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH })

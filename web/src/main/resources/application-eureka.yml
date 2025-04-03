@@ -1,0 +1,28 @@
+eureka:
+  client:
+    # 是否註冊 Eureka
+    registerWithEureka: true
+    # 是否獲取 Eureka 註冊資訊
+    fetchRegistry: true
+    # Eureka Server Location
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    # 更新客戶端清單時間
+    registry-fetch-interval-seconds: 15
+    refresh:
+      enable: true
+  instance:
+    # 初始狀態
+    initial-status: STARTING
+    # 客製 metadata 資訊
+    metadata-map:
+      gRPCPort: ${grpc.server.port}
+    hostname: ${spring.application.name}
+    prefer-ip-address: true
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+    # 發出心跳秒數
+    lease-renewal-interval-in-seconds: 10
+    # 客戶端未發出心跳，Eureka Server剔除時間
+    lease-expiration-duration-in-seconds: 15
+

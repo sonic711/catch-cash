@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @AllArgsConstructor
 @Component
-public class Client {
+public class DiscoveryService {
 
 	private final EurekaClient eurekaClient;
 
@@ -23,7 +23,7 @@ public class Client {
 		log.info("Getting instances from eureka server");
 		List<Application> registeredApplications = eurekaClient.getApplications().getRegisteredApplications();
 		List<InstanceInfo> instancesById = eurekaClient.getInstancesById(serviceName);
-		
+
 	}
 }
 

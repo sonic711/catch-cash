@@ -2,26 +2,22 @@ package com.sean;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
+import com.sean.batch.utils.VersionCommand;
 
 @SpringBootApplication
 public class BatchServiceApplication extends SpringBootServletInitializer {
-	@PostConstruct
-	public void init() {
-		System.out.println("Initializing BatchServiceApplication");
-	}
-
-	@PreDestroy
-	public void destroy() {
-		System.out.println("Destroying BatchServiceApplication");
-	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(BatchServiceApplication.class, args);
+		if (args.length == 0){
+			SpringApplication.run(BatchServiceApplication.class, args);
+		}else {
+			if (args[0].equals("-v") || args[0].equals("--version")){
+				String execute = VersionCommand.execute(args[0]);
+				System.out.println(execute);
+			}
+		}
 	}
 
 }

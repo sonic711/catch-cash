@@ -1,38 +1,71 @@
-def activeProfile = System.getProperty('env', 'local')
+import org.apache.tools.ant.filters.ReplaceTokens
+
+def profile = System.getProperty('env', 'local')
 
 dependencies {
     // include the model project
-    implementation project(':model')
-
-    if (activeProfile != 'local') {
-        api project(path: ':web-vue', configuration: activeProfile)
+    api project(':model')
+    api project(':eureka:eureka-plugin')
+    // UI
+    if (profile != 'local') {
+        api project(path: ':web-vue', configuration: profile)
     }
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
+    implementation 'org.aspectj:aspectjweaver'
     api(
             "io.jsonwebtoken:jjwt-api:0.11.5",
             "io.jsonwebtoken:jjwt-impl:0.11.5",
             "io.jsonwebtoken:jjwt-jackson:0.11.5"
     )
     // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
-    implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.2.1'
+    implementation 'org.apache.httpcomponents.client5:httpclient5'
+
+
     // gson
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
     // jasypt
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
     // commons-io
     implementation 'commons-io:commons-io:2.14.0'
 }
-def profile = project.hasProperty("profile") ? project.property("profile") : "local"
+
 processResources {
-    filesMatching("application.properties") {
-        expand(["springProfile": profile])
+    doFirst {
+        println "Active Profile: ${profile}"
+        // 只針對application.properties進行替換
+        filesMatching(["*.properties", "*.yml"]) { file ->
+            println("Processing file: ${file.path}")
+            // 在文件中替換特定的 tokens
+            filter(ReplaceTokens, tokens: [
+                    "env": profile,
+                    "spring.active.profiles": profile,
+                    "project.groupId"       : project.group,
+                    "project.artifactId"    : project.name,
+                    "project.version"       : project.version
+            ])
+        }
     }
-    // 過濾 resources
-    include("application.properties")
-    include("application-${profile}.properties")
-    include("logback-spring.xml")
-    include("sql/**")
+    // 忽略重複的資源載入
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // 依照所需資源打包至 resources
+    sourceSets {
+        main {
+            resources {
+                // 過濾 resources
+                include("application.properties")
+                include("application-${profile}.properties")
+                include("application-actuator.yml")
+                include("application-eureka.yml")
+                include("logback-spring.xml")
+                include("sql/**")
+            }
+        }
+    }
 }
 
 jar {

@@ -58,11 +58,6 @@ yarn_install {
     dependsOn 'yarn'
 }
 
-//yarn_exec_runner {
-//    dependsOn 'yarn'
-//    yarnCommand = ['dev']
-//}
-
 def isTestTask = gradle.startParameter.taskNames.any { it.toLowerCase().contains('test') }
 
 yarn_check_config {
@@ -92,7 +87,7 @@ yarn_build_local {
     dependsOn 'yarn'
     doLast {
         copy {
-            from 'dist'
+            from 'dist/catch-cash'
             into 'build/localJar'
         }
     }
@@ -116,51 +111,6 @@ yarn_build_dev {
     onlyIf { !isTestTask }
 }
 
-yarn_build_sit {
-    if (yarnMirrorPath) {
-        dependsOn 'yarn_set_mirror'
-    }
-    dependsOn 'yarn_check_config'
-    dependsOn 'yarn'
-    doLast {
-        copy {
-            from 'dist/catch-cash'
-            into 'build/sitJar'
-        }
-    }
-    yarnCommand = ['build:sit']
-    onlyIf { !isTestTask }
-}
-
-//yarn_build_uat {
-//    if (yarnMirrorUrl) {
-//        dependsOn 'yarn_set_mirror'
-//    }
-//    doLast {
-//        copy {
-//            from 'dist/fsap-admin'
-//            into 'build/uatJar'
-//        }
-//    }
-//    yarnCommand = ['build:uat']
-//    onlyIf { !isTestTask }
-//}
-
-//yarn_build_prod {
-//    if (yarnMirrorUrl) {
-//        dependsOn 'yarn_set_mirror'
-//    }
-//    doLast {
-//        copy {
-//            from 'dist/fsap-admin'
-//            into 'build/prodJar'
-//        }
-//    }
-//    yarnCommand = ['build:prod']
-//    onlyIf { !isTestTask }
-//}
-
-
 task build_local(dependsOn: ['yarn_build_local']) {
     finalizedBy 'localJar'
 }
@@ -168,22 +118,6 @@ task build_local(dependsOn: ['yarn_build_local']) {
 task build_dev(dependsOn: ['yarn_build_dev']) {
     finalizedBy 'devJar'
 }
-
-task build_sit(dependsOn: ['yarn_build_sit']) {
-    finalizedBy 'sitJar'
-}
-
-task build_sit2(dependsOn: ['yarn_build_sit']) {
-    finalizedBy 'sitJar'
-}
-
-//task build_uat(dependsOn: ['yarn_build_uat']) {
-//    finalizedBy 'uatJar'
-//}
-
-//task build_prod(dependsOn: ['yarn_build_prod']) {
-//    finalizedBy 'prodJar'
-//}
 
 task localJar(type: Jar, dependsOn: ['yarn_build_local']) {
     archiveClassifier = ''
@@ -197,39 +131,9 @@ task devJar(type: Jar, dependsOn: ['yarn_build_dev']) {
     from 'build/devJar' into classpath_in_jar
 }
 
-
-task sitJar(type: Jar, dependsOn: ['yarn_build_sit']) {
-    archiveClassifier = ''
-//    archiveFileName = "${project.name}.jar"
-    from 'build/sitJar' into classpath_in_jar
-}
-
-task sit2Jar(type: Jar, dependsOn: ['yarn_build_sit']) {
-    archiveClassifier = ''
-//    archiveFileName = "${project.name}.jar"
-    from 'build/sitJar' into classpath_in_jar
-}
-
-//task uatJar(type: Jar, dependsOn: ['yarn_build_uat']) {
-//    archiveClassifier = ''
-//    archiveFileName = "${project.name}.jar"
-//    from 'build/uatJar' into classpath_in_jar
-//}
-
-//task prodJar(type: Jar, dependsOn: ['yarn_build_prod']) {
-//    archiveClassifier = ''
-//    archiveFileName = "${project.name}.jar"
-//    from 'build/prodJar' into classpath_in_jar
-//}
-
-
 configurations {
     local
     dev
-    sit
-    sit2
-//    uat
-//    prod
 }
 
 artifacts {
@@ -243,31 +147,8 @@ artifacts {
         type 'jar'
     }
 
-    sit(sitJar.archiveFile) {
-        builtBy sitJar
-        type 'jar'
-    }
-
-    sit2(sit2Jar.archiveFile) {
-        builtBy sit2Jar
-        type 'jar'
-    }
-
-//    uat(uatJar.archiveFile) {
-//        builtBy uatJar
-//        type 'jar'
-//    }
-
-//    prod(prodJar.archiveFile) {
-//        builtBy prodJar
-//        type 'jar'
-//    }
-
     archives localJar
     archives devJar
-    archives sitJar
-    archives sit2Jar
-//    archives uatJar
-//    archives prodJar
+
 }
 

@@ -12,9 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
+
 @Slf4j
 @RequiredArgsConstructor
-public class InitalDataService {
+public class InitialDataService {
 
 	private final MemberRepo memberRepo;
 

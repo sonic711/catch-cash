@@ -1,6 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-def activeProfile = System.getProperty("env", project.hasProperty("profile") ? project.property("profile") : "local")
+def profile = System.getProperty('env', 'local')
 
 dependencies {
 
@@ -12,15 +12,17 @@ dependencies {
     implementation("com.h2database:h2:2.3.232")
 }
 
+description = 'batch'
+
 processResources {
     doFirst {
-        println "Active Profile: ${activeProfile}"
+        println "Active Profile: ${profile}"
         // 只針對application.properties進行替換
         filesMatching(["*.properties", "*.yml"]) { file ->
             println("Processing file: ${file.path}")
             // 在文件中替換特定的 tokens
             filter(ReplaceTokens, tokens: [
-                    "spring.active.profiles": activeProfile,
+                    "spring.active.profiles": profile,
                     "project.groupId"       : project.group,
                     "project.artifactId"    : project.name,
                     "project.version"       : project.version
@@ -35,11 +37,9 @@ processResources {
     sourceSets {
         main {
             resources {
-                include 'codetable/*'
                 include 'META-INF/*'
-                include 'sql/*'
-                include 'spy.properties'
                 include 'application-actuator.yml'
+                include 'application-eureka.yml'
                 include 'application-info.yml'
             }
         }
@@ -47,7 +47,7 @@ processResources {
 
     def environments = ['local']
 
-    if (environments.contains(activeProfile)) {
+    if (environments.contains(profile)) {
         from "src/main/resources/application.properties"
         into 'src/main/resources/'
     }

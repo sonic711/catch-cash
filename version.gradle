@@ -9,8 +9,8 @@ ext {
         gitVersion = ''
     }
 
-    springBootVersion = '3.4.2'
-    springCloudVersion = '2024.0.0'
+    springBootVersion = '3.4.4'
+    springCloudVersion = '2024.0.1'
     lombokVersion = '1.18.32'
     modelGrpcCommon = '1.11.1'
     TBConvertVersion = '0.0.1'
