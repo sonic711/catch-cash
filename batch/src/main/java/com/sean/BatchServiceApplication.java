@@ -3,10 +3,12 @@ package com.sean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.sean.batch.utils.VersionCommand;
 
 @SpringBootApplication
+@EnableScheduling
 public class BatchServiceApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {

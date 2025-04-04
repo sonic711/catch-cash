@@ -18,8 +18,8 @@ public class DepartmentController {
 
 	final DepartmentRepo departmentRepo;
 
-//	@DeleteMapping(value = "/{departmentId}")
-//	public void deleteMember(@PathVariable Integer departmentId) {
-//		departmentRepo.deleteById(departmentId);
-//	}
+	@DeleteMapping(value = "/{departmentId}")
+	public void deleteMember(@PathVariable Integer departmentId) {
+		departmentRepo.deleteById(departmentId);
+	}
 }
