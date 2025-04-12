@@ -7,12 +7,14 @@
       <el-aside width="200px" class="aside-nav">
         <RouterLink to="/about">頁面1</RouterLink>
         <RouterLink to="/firstPage">頁面2</RouterLink>
+        <RouterLink to="/chatRoom">聊天室</RouterLink>
       </el-aside>
 
       <el-container>
         <el-header>
           <RouterLink to="/about">頁面1</RouterLink>
           <RouterLink to="/firstPage">頁面2</RouterLink>
+          <RouterLink to="/chatRoom">聊天室</RouterLink>
         </el-header>
         <el-main>
           <HomePage v-if="!isLoggedIn" @login-success="isLoggedIn = true"/>

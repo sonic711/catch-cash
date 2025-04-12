@@ -1,0 +1,58 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+def profile = System.getProperty('env', 'local')
+
+dependencies {
+// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+}
+
+description = 'socket'
+
+processResources {
+    doFirst {
+        println "Active Profile: ${profile}"
+        // 只針對application.properties進行替換
+        filesMatching(["*.properties", "*.yml"]) { file ->
+            println("Processing file: ${file.path}")
+            // 在文件中替換特定的 tokens
+            filter(ReplaceTokens, tokens: [
+                    "spring.active.profiles": profile,
+                    "project.groupId"       : project.group,
+                    "project.artifactId"    : project.name,
+                    "project.version"       : project.version
+            ])
+        }
+    }
+
+    // 忽略重複的資源載入
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // 依照所需資源打包至 resources
+    sourceSets {
+        main {
+            resources {
+                include 'META-INF/*'
+                include 'public/*'
+                include 'application-actuator.yml'
+                include 'application-eureka.yml'
+                include 'application-info.yml'
+            }
+        }
+    }
+
+    def environments = ['local']
+
+    if (environments.contains(profile)) {
+        from "src/main/resources/application.properties"
+        into 'src/main/resources/'
+    }
+}
+jar {
+    enabled = false
+}
+
+bootJar {
+    archiveFileName = "${project.name}.jar"
+    enabled = true
+}
