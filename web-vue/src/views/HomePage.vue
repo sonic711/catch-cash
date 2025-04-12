@@ -50,6 +50,9 @@ const pageObj = reactive({
     password: 'password'
   },
 })
+
+const emit = defineEmits(['login-success'])
+
 // 響應式物件
 const ruleFormRef = ref<FormInstance>()
 
@@ -71,6 +74,7 @@ const login = async () => {
       localStorage.setItem('X-Access-Token', res.accessToken)
       // 導向首頁
       await router.push('/about')
+      emit('login-success')
     }
   })
 }

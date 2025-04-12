@@ -1,42 +1,48 @@
 <template>
-  <div class="container">
-    <div class="header">
-      <RouterLink to="/">頁面1</RouterLink>
-      <RouterLink to="/about">頁面2</RouterLink>
-    </div>
-    <div class="content">
-      <router-view v-slot="{ Component }">
-        <component :is="Component"/>
-      </router-view>
-    </div>
+  <div class="common-layout" v-if="!isLoggedIn">
+    <HomePage v-if="!isLoggedIn" @login-success="isLoggedIn = true"/>
+  </div>
+  <div v-else>
+    <el-container>
+      <el-aside width="200px" class="aside-nav">
+        <RouterLink to="/about">頁面1</RouterLink>
+        <RouterLink to="/firstPage">頁面2</RouterLink>
+      </el-aside>
+
+      <el-container>
+        <el-header>
+          <RouterLink to="/about">頁面1</RouterLink>
+          <RouterLink to="/firstPage">頁面2</RouterLink>
+        </el-header>
+        <el-main>
+          <HomePage v-if="!isLoggedIn" @login-success="isLoggedIn = true"/>
+          <div v-else>
+            <router-view
+                v-slot="{ Component }">
+              <component :is="Component"/>
+            </router-view>
+          </div>
+        </el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 <script setup lang="ts">
+import HomePage from "@/views/HomePage.vue";
+import {ref} from "vue";
+
+const isLoggedIn = ref(false)
+
 </script>
 <style scoped>
-/* 將外層div設置為Flexbox佈局 */
-.container {
+.aside-nav {
   display: flex;
-  flex-direction: column; /* 將元素垂直排列 */
-  height: 100vh; /* 設置高度以填滿整個視窗 */
+  flex-direction: column;
+  padding: 1rem;
 }
 
-.header {
-  background-color: #f0f0f0;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
+.aside-nav a {
+  margin-bottom: 0.5rem;
 }
 
-.header a {
-  text-decoration: none;
-  color: #333;
-  margin: 0 10px;
-}
-
-.content {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
 </style>

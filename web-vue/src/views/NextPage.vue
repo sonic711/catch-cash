@@ -63,6 +63,7 @@ import {useRoute, useRouter} from "vue-router";
 import {ElMessageBox} from "element-plus";
 import axios from 'axios';
 import HelloWorld from "@/components/Popup.vue";
+import ApiService from "@/api/request";
 
 const route = useRoute()
 const router = useRouter()
@@ -89,7 +90,7 @@ const closeDialog = (bool: boolean, msg: string) => {
 
 const getMembers = () => {
   const members = pageDataStore.getPageData('members');
-  if (members.length > 0) {
+  if (members && members.length > 0) {
     hasData.value = true
     pageObj.members = members
   }
@@ -103,19 +104,26 @@ const query = async () => {
 
         },
       })
+    } else {
+      ElMessageBox.alert("帳號不存在", {
+        confirmButtonText: '確定',
+        callback: () => {
+
+        },
+      })
     }
   })
 }
-const queryFromDB = async() => {
+const queryFromDB = async () => {
   loading.value = true
-  await axios.get('http://localhost:441/sslDemo/server/get').then(res => {
-    if (res.status === 200) {
-      console.log(res.data)
-      pageObj.members = res.data
-    } else {
-      console.log('error')
-    }
-  });
+  try {
+    const res = await ApiService.get('/api/member') as any;
+    console.log(res)
+    pageObj.members = res as any[]
+    hasData.value = true
+  } catch (error) {
+    console.error('Error:', error);
+  }
   // 接著執行
   loading.value = false
 }
@@ -125,11 +133,11 @@ onBeforeMount(() => {
 })
 onMounted(() => {
   console.log('before to next page:' + route.query.type)
-  // const members = pageDataStore.getPageData('members');
-  // if (members.length > 0) {
-  //   hasData.value = true
-  //   pageObj.members = members
-  // }
+  const members = pageDataStore.getPageData('members');
+  if (members && members.length > 0) {
+    hasData.value = true
+    pageObj.members = members
+  }
 })
 onBeforeUpdate(() => {
   // console.log('before to next page:' + route.query.type)
