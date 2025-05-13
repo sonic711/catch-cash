@@ -17,6 +17,7 @@
         <el-col :span="12">
           <el-form-item label="密碼" prop="password">
             <el-input
+                show-password
                 prop="password"
                 v-model="pageObj.form.password"
                 placeholder="請輸入密碼"/>
