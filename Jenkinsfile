@@ -175,10 +175,10 @@ pipeline {
     post {
         always {
             script {
-                BUILD_USER = currentBuild.rawBuild.getCause(Cause.UserIdCause)?.getUserId()
-                if (!BUILD_USER) BUILD_USER = "Job Scheduler"
-                COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger',]
-                echo "【${currentBuild.currentResult}】 Job ${env.JOB_NAME} build #${env.BUILD_NUMBER} by ${BUILD_USER}"
+//                 BUILD_USER = currentBuild.rawBuild.getCause(Cause.UserIdCause)?.getUserId()
+//                 if (!BUILD_USER) BUILD_USER = "Job Scheduler"
+//                 COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger',]
+//                 echo "【${currentBuild.currentResult}】 Job ${env.JOB_NAME} build #${env.BUILD_NUMBER} by ${BUILD_USER}"
             }
             //slackSend channel: '#ci-jenkins',
             //        color: COLOR_MAP[currentBuild.currentResult],
