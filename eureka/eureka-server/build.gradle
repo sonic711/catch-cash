@@ -19,3 +19,8 @@ dependencies {
             'org.apache.commons:commons-lang3',
     )
 }
+
+bootJar {
+    archiveFileName = "${project.name}.jar"
+    enabled = true
+}
