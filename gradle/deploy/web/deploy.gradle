@@ -6,7 +6,7 @@ ext.deploy_remotes = [
             env: ['dev'],
             bin_home: '/app/sean/bin',
             app_home: '/app/sean/web-server',
-            jar_name: 'web-server.jer',
+            jar_name: 'web-server.jar',
             spring_config_filename: 'application-dev.properties',
             env_info: { server_config ->
                 [
