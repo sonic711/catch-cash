@@ -1,6 +1,8 @@
 <template>
   <div class="common-layout" v-if="!isLoggedIn">
-    <HomePage v-if="!isLoggedIn" @login-success="isLoggedIn = true"/>
+    <el-container>
+      <HomePage v-if="!isLoggedIn" @login-success="isLoggedIn = true"/>
+    </el-container>
   </div>
   <div v-else>
     <el-container>
@@ -9,21 +11,18 @@
         <RouterLink to="/firstPage">頁面2</RouterLink>
         <RouterLink to="/chatRoom">聊天室</RouterLink>
       </el-aside>
-
       <el-container>
         <el-header>
           <RouterLink to="/about">頁面1</RouterLink>
           <RouterLink to="/firstPage">頁面2</RouterLink>
           <RouterLink to="/chatRoom">聊天室</RouterLink>
+          <RouterLink to="/" @click="isLoggedIn = false">登出</RouterLink>
         </el-header>
         <el-main>
-          <HomePage v-if="!isLoggedIn" @login-success="isLoggedIn = true"/>
-          <div v-else>
             <router-view
                 v-slot="{ Component }">
               <component :is="Component"/>
             </router-view>
-          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -45,6 +44,12 @@ const isLoggedIn = ref(false)
 
 .aside-nav a {
   margin-bottom: 0.5rem;
+}
+
+.common-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 </style>
