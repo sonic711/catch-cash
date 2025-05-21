@@ -106,14 +106,6 @@ pipeline {
                     }
                     archiveArtifacts artifacts: "${path_project}build/libs/*.jar", allowEmptyArchive: true
                     archiveArtifacts artifacts: "${path_project}build/libs/*.war", allowEmptyArchive: true
-                    archiveArtifacts artifacts: 'build/reports/problems/problems-report.html', allowEmptyArchive: true
-                    publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'build/reports/problems', reportFiles: 'problems-report.html', reportName: 'Problems Report'])
-
-                    // 設定檔處理邏輯
-                    def config_env = params.env == 'uat' ? 'prod' : params.env
-                    def config_path = "${path_project}src/main/resources/config/${config_env}/*"
-
-                    archiveArtifacts artifacts: config_path, allowEmptyArchive: true
                 }
             }
         }
