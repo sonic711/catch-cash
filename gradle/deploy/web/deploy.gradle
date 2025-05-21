@@ -29,7 +29,7 @@ ext.deploy_remotes = [
             api_test: [
                 protocol: 'http',
                 port: 8081,
-                context: '/fsap-admin',
+                context: '/catch-cash',
             ]
         ],
 
