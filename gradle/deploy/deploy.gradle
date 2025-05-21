@@ -1,0 +1,226 @@
+import static org.gradle.internal.logging.text.StyledTextOutput.Style
+import org.gradle.internal.logging.text.StyledTextOutputFactory
+def out = services.get(StyledTextOutputFactory).create("gradle-color-output")
+
+apply plugin: "org.hidetake.ssh"
+
+def privateKey = file(System.properties['user.home'] + "/.ssh/id_rsa")
+def remote_prepared_folder = 'prepared_build'
+
+task sshInfo {
+    group = 'Deploy'
+    description = 'Show SSH Private Key Location'
+    doFirst {
+        logger.quiet "\n\n\u001b[32mLoading private key for deploy at location ${privateKey} \u001B[0m\n\n"
+    }
+}
+
+ssh.settings {
+    dryRun = project.hasProperty('dryRun')
+    //pty = true
+    encoding = 'UTF-8'
+    knownHosts = allowAnyHosts
+    timeoutSec = 600
+    jschLog = true
+}
+
+tasks.register('put_files') {
+    group = 'Deploy'
+    description = 'Put Files to Remote Server'
+    doLast {
+        def system_prop = System.getProperties()
+        def env = system_prop.get('env', 'SIT')
+        def exclude_remotes = system_prop.get('exclude_remotes', '')
+        def include_remotes = system_prop.get('include_remotes', '')
+
+        if (deploy.enabled) {
+            deploy_remotes.findAll(x ->
+                    x.value.env.any { it.toLowerCase() == env.split('~')[0].toLowerCase() }
+                            && !exclude_remotes.split(',').contains(x.key)
+                            && (include_remotes.equals('') || include_remotes.split(',').contains(x.key))
+            ).each {
+                def server_name = it.getKey()
+                def server_config = it.getValue()
+                ssh.run {
+                    session(server_config.server) {
+                        out.withStyle(Style.Info).println "\n\tProc Remote [$server_name] ... \n"
+                        execute """
+                            set -e
+                            rm -rf ${server_config.app_home}/${remote_prepared_folder}
+                        """, logging: 'stdout'
+                        server_config.put_files(server_config).findAll(x -> !(x.only_first_time ?: false)).each {
+                            def is_rename = it.is_rename ?: false
+                            def is_into_app_home = it.is_into_app_home ?: false
+                            def put_from = it.from
+                            def put_into = it.into
+                            if (put_from instanceof Task) put_from = put_from.archiveFile.get().asFile.path
+                            if (is_into_app_home) put_into = "${server_config.app_home}/$put_into"
+                            if (!is_rename) put_into = "${put_into}/" + file("${put_from}").name
+                            def fromFile = file(put_from)
+                            if (!is_rename && fromFile.isDirectory()) {
+                                fromFile.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+                                    def relativePath = fromFile.relativePath(file)
+                                    def targetPath = "$put_into/$relativePath"
+                                    out.withStyle(Style.Info).println "put file to remote $server_name: $file --> $targetPath"
+                                    def praent_dir = execute("dirname '${targetPath}'", logging: 'none')
+                                    execute "mkdir -p ${praent_dir}", logging: 'stdout'
+                                    put from: file, into: "${targetPath}", logging: 'stdout'
+                                    execute "chmod u+x '${targetPath}'", logging: 'stdout'
+                                }
+                            } else {
+                                out.withStyle(Style.Info).println "put file to remote $server_name: $put_from --> $put_into"
+                                def praent_dir = execute("dirname '${put_into}'", logging: 'none')
+                                execute "mkdir -p ${praent_dir}", logging: 'stdout'
+                                put from: put_from, into: put_into, logging: 'stdout'
+                                execute "chmod u+x '$put_into'", logging: 'stdout'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+task remote_start {
+    group = 'Deploy'
+    description = 'Start Remote Server'
+    doLast {
+        def system_prop = System.getProperties()
+        def env = system_prop.get('env', 'SIT')
+        def exclude_remotes = system_prop.get('exclude_remotes', '')
+        def include_remotes = system_prop.get('include_remotes', '')
+        def remote_start_mode = system_prop.get('remote_start_mode', 'Apply_New_Version')
+        def remote_start_rollback_version = system_prop.get('remote_start_rollback_version', '')
+        def deploymentFailed = false
+        def failed_list = []
+        if (deploy.enabled) {
+            deploy_remotes.findAll(x ->
+                    x.value.env.any { it.toLowerCase() == env.split('~')[0].toLowerCase() }
+                && !exclude_remotes.split(',').contains(x.key)
+                && (include_remotes.equals('') || include_remotes.split(',').contains(x.key))
+            ).each {
+                def server_name = it.getKey()
+                def server_config = it.getValue()
+                ssh.run {
+                    session(server_config.server) {
+                        def testUrl = "${server_config.api_test.protocol}://127.0.0.1:${server_config.api_test.port}${server_config.api_test.context}"
+                        out.withStyle(Style.Info).println "\n\n\ttest api url: $testUrl \n\n"
+                        try {
+                            if (remote_start_mode.equals('Apply_New_Version')) {
+                                out.withStyle(Style.Info).println "\n\n\tstart server on remote [$server_name] with mode [$remote_start_mode]\n\n"
+                                execute """
+                                    set -e
+                                    cd $server_config.bin_home
+                                    ./stop.sh $server_config.app_home
+                                    cp -r ${server_config.app_home}/${remote_prepared_folder}/. ${server_config.app_home}
+                                    ./run.sh $server_config.app_home
+                                    ./test.sh $testUrl
+                                """, logging: 'stdout'
+                            } else if (remote_start_mode.equals('Restart')) {
+                                out.withStyle(Style.Info).println "\n\n\tstart server on remote [$server_name] with mode [$remote_start_mode]\n\n"
+                                execute """
+                                    set -e
+                                    cd $server_config.bin_home
+                                    ./stop.sh $server_config.app_home
+                                    ./run.sh $server_config.app_home
+                                    ./test.sh $testUrl
+                                """, logging: 'stdout'
+                            } else if (remote_start_mode.equals('Rollback')) {
+                                out.withStyle(Style.Info).println "\n\n"
+                                out.withStyle(Style.Info).println "\tstart server on remote [$server_name] with mode [$remote_start_mode]"
+                                out.withStyle(Style.Info).println "\tRollback Version = [$remote_start_rollback_version]"
+                                out.withStyle(Style.Info).println "\n\n"
+                                execute """
+                                    set -e
+                                    cd $server_config.bin_home
+                                    ./stop.sh $server_config.app_home
+                                    ./switch.sh $server_config.app_home $remote_start_rollback_version
+                                    ./run.sh $server_config.app_home
+                                    ./test.sh $testUrl
+                                """, logging: 'stdout'
+                            } else {
+                                out.withStyle(Style.Failure).println "\n\n\t不支援的 remote_start_mode: [$remote_start_mode] \n\n"
+                                throw new GradleException("不支援的 remote_start_mode: [$remote_start_mode]")
+                            }
+                        } catch (Exception e) {
+                            deploymentFailed = true
+                            failed_list.add(server_name)
+                            out.withStyle(Style.Error).println "Deployment failed on server [${server_name}]: ${e.message}"
+                        }
+                    }
+                }
+            }
+            if (failed_list.size() > 0) {
+                out.withStyle(Style.Error).println "Deployment failed servers [${failed_list}]"
+            }
+            if (deploymentFailed) {
+                throw new GradleException("One or more deployments failed.")
+            }
+        }
+    }
+}
+
+task remote_stop {
+    group = 'Deploy'
+    description = 'Stop Remote Server'
+    doLast {
+        def system_prop = System.getProperties()
+        def env = system_prop.get('env', 'SIT')
+        def exclude_remotes = system_prop.get('exclude_remotes', '')
+        def include_remotes = system_prop.get('include_remotes', '')
+        if (deploy.enabled) {
+            deploy_remotes.findAll(x ->
+                    x.value.env.any { it.toLowerCase() == env.split('~')[0].toLowerCase() }
+                            && !exclude_remotes.split(',').contains(x.key)
+                            && (include_remotes.equals('') || include_remotes.split(',').contains(x.key))
+            ).each {
+                def server_name = it.getKey()
+                def server_config = it.getValue()
+                ssh.run {
+                    session(server_config.server) {
+                        out.withStyle(Style.Info).println "\n\n\t(strict) stop server on remote $server_name \n\n"
+                        execute """
+                            set -e
+                            cd $server_config.bin_home
+                            sh ./stop.sh $server_config.app_home
+                        """, logging: 'stdout'
+                    }
+                }
+            }
+        }
+    }
+}
+
+task deploy {
+    group = 'Deploy'
+    description = 'Deploy to Remote Server'
+    def env = System.getProperty('env', 'SIT')
+    def is_JMH = env.endsWith('_JMH')
+    if (is_JMH) {
+        finalizedBy 'jmhJar', put_files
+        put_files.mustRunAfter 'jmhJar'
+    } else {
+        finalizedBy bootJar, put_files, remote_start
+        put_files.mustRunAfter bootJar
+        remote_start.mustRunAfter put_files
+    }
+}
+
+task put_files_first {
+    group = 'Deploy'
+    description = 'First Time Put Files to Remote Server'
+    finalizedBy put_files
+    doFirst {
+        System.setProperty("is_first_time", "true")
+    }
+}
+
+task deploy_first {
+    group = 'Deploy'
+    description = 'First Time Deploy to Remote Server'
+    finalizedBy deploy
+    doFirst {
+        System.setProperty("is_first_time", "true")
+    }
+}
