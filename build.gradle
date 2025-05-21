@@ -39,6 +39,14 @@ ext {
     gitUserEmail = "git config user.email".execute().text.trim()
     gitUserName = "git config user.name".execute().text.trim()
 }
+allprojects {
+    repositories {
+        flatDir { dirs "$rootProject.projectDir/libs" }
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+}
 
 subprojects {
     apply plugin: 'java'
