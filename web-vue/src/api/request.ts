@@ -7,7 +7,7 @@ class ApiService {
 
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: 'http://127.0.0.1:9090/catch-cash',
+            baseURL: import.meta.env.VITE_BASE_API,
             timeout: 60000,
             withCredentials: false
         });
