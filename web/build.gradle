@@ -60,6 +60,7 @@ processResources {
         main {
             resources {
                 // 過濾 resources
+                include ('META-INF/*')
                 include("application.properties")
                 include("application-${profile}.properties")
                 include("application-actuator.yml")
