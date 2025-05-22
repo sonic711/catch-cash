@@ -30,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.sean.web.api.ApiPathConstant.BASE_PATH;
-import static com.sean.web.api.ApiSettingConstant.JPEG;
 
 @RestController
 @RequestMapping(value = BASE_PATH + "/member")
@@ -97,9 +96,7 @@ public class MemberController extends CommonWebController{
 	// 下載圖片
 	@Operation(summary = "Download Member Image", description = "下載會員照片", tags = { "Member" }, parameters = { @Parameter(name = "memberId", description = "會員編號", required = true, example = "1") }, responses = { @ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Not Found") })
 	@GetMapping(value = "/image/{memberId}")
-	public String downloadMemberImage(@PathVariable Integer memberId) {
-		byte[] imageBytes = mainService.downloadImg(memberId);
-		String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-		return JPEG + base64Image;
+	public BasicOut<String> downloadMemberImage(@PathVariable Integer memberId) {
+		return mainService.downloadImg(memberId);
 	}
 }

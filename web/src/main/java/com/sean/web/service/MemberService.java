@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
 import java.util.List;
+
+import static com.sean.web.api.ApiSettingConstant.JPEG;
 
 @Service
 @Slf4j
@@ -49,12 +52,12 @@ public class MemberService {
     }
 
     public void saveMember(MemberEntity member) {
-        member.setCreateUser("ADMIN");
+//        member.setCreateUser("ADMIN");
         memberDao.saveMember(member);
     }
 
     public void updateMember(MemberEntity member) {
-        member.setUpdateUser("ADMIN123");
+//        member.setUpdateUser("ADMIN123");
 //        member.getDepartment().setCreateUser("ADMIN123");
         memberDao.updateMember(member);
     }
@@ -68,7 +71,11 @@ public class MemberService {
     }
 
     // 下載圖片
-    public byte[] downloadImg(Integer memberId){
-        return memberDao.downloadImage(memberId);
+    public BasicOut<String> downloadImg(Integer memberId){
+        BasicOut<String> result = new BasicOut<>();
+        byte[] imageBytes = memberDao.downloadImage(memberId);
+        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+        result.setData(JPEG + base64Image);
+        return result;
     }
 }

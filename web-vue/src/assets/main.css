@@ -1,9 +1,12 @@
 /*@import './base.css';*/
 
 #app {
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100vw; /* 視窗寬度 */
+  height: 100vh; /* 視窗高度 */
+  margin: 0; /* 移除邊距 */
+  padding: 0; /* 移除內邊距（或根據需要保留） */
   font-weight: normal;
+  overflow: auto; /* 若內容超出，啟用滾動條 */
 }
 
 a,
