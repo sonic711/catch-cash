@@ -39,7 +39,7 @@
 import {useRoute, useRouter} from "vue-router";
 import {usePageDataStore} from "@/stores/counter";
 import {reactive, ref} from "vue";
-import type {FormInstance, FormRules} from "element-plus";
+import {ElMessageBox, type FormInstance, type FormRules} from "element-plus";
 import ApiService from "@/api/request";
 
 const route = useRoute()
@@ -71,11 +71,20 @@ const login = async () => {
         "password": pageObj.form.password
       }
       const res = await ApiService.post('/sys/login', data) as any;
-      // 儲存 access_token
-      localStorage.setItem('X-Access-Token', res.accessToken)
-      // 導向首頁
-      await router.push('/about')
-      emit('login-success')
+      if (res) {
+        // 成功登入 儲存 access_token
+        localStorage.setItem('X-Access-Token', res.accessToken)
+        // 導向首頁
+        await router.push('/about')
+        emit('login-success')
+      } else {
+        await ElMessageBox.alert('帳號或密碼錯誤', '錯誤', {
+          confirmButtonText: '確定',
+          callback: () => {
+
+          },
+        })
+      }
     }
   })
 }
