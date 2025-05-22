@@ -1,3 +1,5 @@
+apply from: "$rootProject.projectDir/gradle/deploy/$project.name/deploy.gradle"
+apply from: "$rootProject.projectDir/gradle/deploy/deploy.gradle"
 
 group = 'com.sean'
 version = '0.0.1-SNAPSHOT'
@@ -12,7 +14,8 @@ dependencyManagement {
 dependencies {
 
     api ('org.springframework.cloud:spring-cloud-starter-netflix-eureka-server')
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
     api (
             'org.springframework.boot:spring-boot-starter-validation',
