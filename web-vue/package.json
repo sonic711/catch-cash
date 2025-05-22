@@ -7,8 +7,8 @@
     "dev": "vite serve",
     "build": "vite build",
     "build:local": "vite build",
-    "build:dev": "vite build --mode btdevelopment",
-    "build:sit": "vite build --mode sitdevelopment",
+    "build:dev": "vite build --mode dev",
+    "build:sit": "vite build --mode sit",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force"
