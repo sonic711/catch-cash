@@ -26,11 +26,11 @@
         <appender name="FILE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_PATH}/${FOLDER_NAME}/current.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <!-- 每小時滾動，檔案命名包含日期和小時 -->
-                <fileNamePattern>${LOG_PATH}/${FOLDER_NAME}/%d{yyyyMMdd-HH}.log.tar.gz</fileNamePattern>
+                <!-- 每小時滾動，檔案命名包含日期、小時和索引，壓縮為 tgz -->
+                <fileNamePattern>${LOG_PATH}/${FOLDER_NAME}/%d{yyyyMMdd-HH}-%i.log.tar.gz</fileNamePattern>
                 <!-- 保留100個歷史檔案 -->
                 <maxHistory>100</maxHistory>
-                <!-- 設置時間單位為小時 -->
+                <!-- 設置時間單位為小時並限制檔案大小 -->
                 <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                     <maxFileSize>100MB</maxFileSize>
                 </timeBasedFileNamingAndTriggeringPolicy>
