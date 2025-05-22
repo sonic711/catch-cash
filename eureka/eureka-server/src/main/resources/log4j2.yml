@@ -1,0 +1,18 @@
+Configuration:
+  status: debug
+  Appenders:
+    RollingFile:
+      name: RollingFileAppender
+      fileName: /Users/sonic711/logs/app.log
+      filePattern: /Users/sonic711/logs/app-%d{yyyy-MM-dd-HH}.log.tgz
+      Policies:
+        TimeBasedTriggeringPolicy:
+          interval: 1
+          modulate: true
+      DefaultRolloverStrategy:
+        compressionLevel: 6
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        ref: RollingFileAppender
