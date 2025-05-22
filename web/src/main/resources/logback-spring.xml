@@ -6,7 +6,6 @@
     <!-- Log Content Style : 彩色版 -->
     <property name="CONSOLE_LOG_PATTERN"
               value="%white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%-5level) %magenta(%thread) %red(%file:%line) %green(%logger) %cyan(%msg%n)"/>
-    <!--	<property name="LOG_PATH" value="${user.home}/logs" />-->
     <springProperty name="LOG_PATH" source="logging.file.path" defaultValue="/Users/sonic711/logs"/>
     <springProperty name="FOLDER_NAME" source="spring.application.name" defaultValue="catch-cash"/>
 
@@ -22,13 +21,19 @@
             <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
+
     <springProfile name="dev">
         <appender name="FILE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>${LOG_PATH}/${FOLDER_NAME}/%d{yyyyMMdd}-%i.log.zip
-                </fileNamePattern>
-                <maxFileSize>100MB</maxFileSize>
+            <file>${LOG_PATH}/${FOLDER_NAME}/current.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 每小時滾動，檔案命名包含日期和小時 -->
+                <fileNamePattern>${LOG_PATH}/${FOLDER_NAME}/%d{yyyyMMdd-HH}.log.tar.gz</fileNamePattern>
+                <!-- 保留100個歷史檔案 -->
                 <maxHistory>100</maxHistory>
+                <!-- 設置時間單位為小時 -->
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>100MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
             </rollingPolicy>
             <encoder>
                 <pattern>${NORMAL_LOG_PATTERN}</pattern>
