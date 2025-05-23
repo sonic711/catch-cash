@@ -1,0 +1,36 @@
+def privateKey = file(System.properties['user.home'] + "/.ssh/id_rsa")
+def remote_prepared_folder = 'prepared_build'
+
+ext.deploy_remotes = [
+        DEV_server: [
+            env: ['dev'],
+            bin_home: '/app/sean/bin',
+            app_home: '/app/sean/socket',
+            jar_name: 'socket.jar',
+            spring_config_filename: 'application.properties',
+            env_info: { server_config ->
+                [
+                        [only_first_time: true, name: 'JAVA_HOME', value: '/app/sean/jdk-17.0.12'],
+                        [only_first_time: false, name: 'BOOTJAR_LOCATION', value: "${server_config.jar_name}"],
+                        [only_first_time: false, name: 'SPRING_CONFIG_ADDITIONAL_LOCATION', value: "${server_config.spring_config_filename}"],
+                ]
+            },
+            put_files: { server_config ->
+                [
+                    [from: "${project.projectDir.path}/src/main/resources/${server_config.spring_config_filename}", into: "${remote_prepared_folder}", is_into_app_home: true],
+                    [from: tasks.findByName('bootJar'), into: "${remote_prepared_folder}/${server_config.jar_name}", is_into_app_home: true, is_rename: true, is_fetch_git_properties: true],
+                ]
+            },
+            server: [
+                identity: privateKey,
+                host: '152.69.193.219',
+                user: 'opc'
+            ],
+            api_test: [
+                protocol: 'http',
+                port: 8082,
+                context: '',
+            ]
+        ],
+
+]

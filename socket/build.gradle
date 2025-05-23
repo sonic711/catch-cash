@@ -32,20 +32,9 @@ processResources {
     sourceSets {
         main {
             resources {
-                include 'META-INF/*'
-                include 'public/*'
-                include 'application-actuator.yml'
-                include 'application-eureka.yml'
-                include 'application-info.yml'
+                include 'application.properties'
             }
         }
-    }
-
-    def environments = ['local']
-
-    if (environments.contains(profile)) {
-        from "src/main/resources/application.properties"
-        into 'src/main/resources/'
     }
 }
 jar {
