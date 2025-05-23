@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 public class HealthController {
-	@PostMapping
+	@PostMapping("/health")
 	public String login(@RequestBody String body) {
 		log.info(body);
 		return "success";
