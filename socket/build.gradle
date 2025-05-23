@@ -1,5 +1,8 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
+apply from: "$rootProject.projectDir/gradle/deploy/$project.name/deploy.gradle"
+apply from: "$rootProject.projectDir/gradle/deploy/deploy.gradle"
+
 def profile = System.getProperty('env', 'local')
 
 dependencies {
