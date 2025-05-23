@@ -35,6 +35,7 @@ processResources {
     sourceSets {
         main {
             resources {
+                include ('META-INF/*')
                 include 'application.properties'
             }
         }
