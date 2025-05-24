@@ -29,7 +29,7 @@ const messages = ref<string[]>([])
 let socket: WebSocket | null = null
 
 onMounted(() => {
-  socket = new WebSocket('ws://localhost:8080/channel/echo')
+  socket = new WebSocket('ws://localhost:8082/channel/echo')
 
   socket.onopen = () => {
     console.log('✅ 連線已開啟')

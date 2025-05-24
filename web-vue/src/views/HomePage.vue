@@ -52,8 +52,6 @@ const pageObj = reactive({
   },
 })
 
-const emit = defineEmits(['login-success'])
-
 // 響應式物件
 const ruleFormRef = ref<FormInstance>()
 
@@ -74,9 +72,8 @@ const login = async () => {
       if (res) {
         // 成功登入 儲存 access_token
         localStorage.setItem('X-Access-Token', res.accessToken)
-        // 導向首頁
-        await router.push('/about')
-        emit('login-success')
+        // 導向儀表板
+        await router.push('/dashboard')
       } else {
         await ElMessageBox.alert('帳號或密碼錯誤', '錯誤', {
           confirmButtonText: '確定',
