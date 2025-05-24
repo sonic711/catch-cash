@@ -30,12 +30,14 @@ class ApiService {
 
     private handleSuccess(response: AxiosResponse) {
         if (response.data.code === 50003) {
+            // Remove the invalid token from localStorage
+            localStorage.removeItem('X-Access-Token');
             ElMessageBox.alert('Token 失效，請重新登入', '錯誤', {
                 confirmButtonText: '確定',
                 callback: () => {
-                    location.replace("/catch-cash/");
+                    location.replace("/catch-cash/#/login");
                 },
-            }).then(r => location.replace("/catch-cash/"));
+            }).then(r => location.replace("/catch-cash/#/login"));
         }
         return response.data;
     }
