@@ -68,10 +68,6 @@ function sendMessage() {
 </script>
 
 <style scoped>
-.chat-card {
-  width: 500px;
-  margin: 40px auto;
-}
 
 .chat-messages {
   height: 300px;
