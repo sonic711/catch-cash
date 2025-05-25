@@ -8,11 +8,7 @@
         <div class="nav-links">
           <RouterLink to="/about" class="nav-link">
             <el-icon><Document /></el-icon>
-            <span>頁面1</span>
-          </RouterLink>
-          <RouterLink to="/firstPage" class="nav-link">
-            <el-icon><Grid /></el-icon>
-            <span>頁面2</span>
+            <span>帳號管理</span>
           </RouterLink>
           <RouterLink to="/chatRoom" class="nav-link">
             <el-icon><ChatDotRound /></el-icon>
@@ -72,7 +68,7 @@ const router = useRouter();
 
 const currentRoute = computed(() => {
   const routeMap: Record<string, string> = {
-    '/about': '頁面1',
+    '/about': '帳號管理',
     '/firstPage': '頁面2',
     '/chatRoom': '聊天室'
   };

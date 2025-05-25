@@ -6,14 +6,14 @@
           <h1 class="app-title">Catch Cash</h1>
           <p class="app-subtitle">您的財務管理助手</p>
         </div>
-        <HomePage />
+        <LoginLogic />
       </div>
     </el-container>
   </div>
 </template>
 
 <script setup lang="ts">
-import HomePage from "@/views/HomePage.vue";
+import LoginLogic from "@/views/login/LoginLogic.vue";
 </script>
 
 <style scoped>

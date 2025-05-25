@@ -4,13 +4,14 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
+
       path: '/',
       redirect: '/login'
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/login/LoginView.vue')
     },
     {
       path: '/dashboard',
@@ -20,17 +21,17 @@ const router = createRouter({
         {
           path: '/about',
           name: 'about',
-          component: () => import('../views/AboutView.vue')
+          component: () => import('../views/member/CreateMember1st.vue')
         },
         {
           path: '/firstPage',
           name: 'firstPage',
-          component: () => import('../views/NextPage.vue')
+          component: () => import('../views/member/CreateMember2rd.vue')
         },
         {
           path: '/chatRoom',
           name: 'chatRoom',
-          component: () => import('../views/ChatRoom.vue')
+          component: () => import('../views/chat/ChatRoom.vue')
         },
       ]
     }

@@ -115,7 +115,7 @@ import {onMounted, reactive, ref} from "vue";
 import {ElMessage, ElMessageBox, type FormInstance, type FormRules, type UploadProps} from "element-plus";
 import {usePageDataStore} from "@/stores/counter";
 import axios from "axios";
-import ApiService from '../api/request';
+import ApiService from '../../api/request';
 
 const imgPreviewList = ref<any>([])
 const showImagePreview = ref(false)
