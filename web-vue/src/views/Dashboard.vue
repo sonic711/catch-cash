@@ -88,19 +88,19 @@ const logout = () => {
 <style scoped>
 /* Main App Styles */
 .app-container {
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--background-color);
 }
 
 .main-container {
-  height: 100%;
+  min-height: 100%;
 }
 
 /* Sidebar Styles */
 .aside-nav {
   background-color: var(--primary-color);
   color: white;
-  height: 100%;
+  min-height: 100%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -191,6 +191,7 @@ const logout = () => {
   overflow-y: auto;
   position: relative;
   min-height: calc(100vh - 120px); /* Account for header and footer */
+  height: auto; /* Ensure it grows with content */
 }
 
 .content-main::before {
