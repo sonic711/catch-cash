@@ -180,15 +180,43 @@ const logout = () => {
 
 /* Main Content Styles */
 .content-main {
-  padding: 1.5rem;
+  padding: 2rem;
   background-color: var(--background-color);
+  background-image:
+    linear-gradient(to bottom right, rgba(240, 240, 245, 0.5), rgba(230, 230, 240, 0.3)),
+    radial-gradient(circle at 25% 25%, rgba(var(--primary-color-rgb, 52, 152, 219), 0.05) 1%, transparent 15%),
+    radial-gradient(circle at 75% 75%, rgba(var(--secondary-color-rgb, 46, 204, 113), 0.05) 1%, transparent 15%);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+  background-position: 0 0, 0 0, 0 0;
   overflow-y: auto;
+  position: relative;
+  min-height: calc(100vh - 120px); /* Account for header and footer */
+}
+
+.content-main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color, #4a90e2));
+  opacity: 0.7;
 }
 
 .page-card {
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.06), 0 2px 8px 0 rgba(0, 0, 0, 0.04);
+  border-radius: 8px;
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.page-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.08), 0 4px 12px 0 rgba(0, 0, 0, 0.06);
 }
 
 /* Footer Styles */
