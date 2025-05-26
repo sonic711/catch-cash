@@ -1,0 +1,92 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5">
+  <diagram name="第1頁" id="doWAhPn3OTSvI6Tgqg5D">
+    <mxGraphModel dx="1871" dy="1220" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="-BIKbDOcijmErjLYlXdd-11" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="350" y="35" width="290" height="530" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;align=center;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-11">
+          <mxGeometry y="70.30612244897958" width="290" height="459.69387755102036" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-10" value="Oracle Cloud" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-11">
+          <mxGeometry x="100" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-6" value="" style="group" vertex="1" connectable="0" parent="-BIKbDOcijmErjLYlXdd-11">
+          <mxGeometry x="32.5" y="80" width="230" height="143.75" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#3333FF;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-6">
+          <mxGeometry y="36.25" width="230" height="103.75" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-5" value="&lt;font style=&quot;color: rgb(51, 51, 255);&quot;&gt;Docker&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-6">
+          <mxGeometry x="82.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-3" value="Jenkins" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-6">
+          <mxGeometry x="52.5" y="60" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-7" value="" style="group" vertex="1" connectable="0" parent="-BIKbDOcijmErjLYlXdd-11">
+          <mxGeometry x="33" y="371" width="225" height="143.75" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-8" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#3333FF;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-7">
+          <mxGeometry y="36.25" width="225" height="107.5" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-9" value="&lt;font style=&quot;color: rgb(51, 51, 255);&quot;&gt;Docker&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-7">
+          <mxGeometry x="82.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-12" value="MySQL" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-7">
+          <mxGeometry x="52.5" y="60" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="-BIKbDOcijmErjLYlXdd-11" source="-BIKbDOcijmErjLYlXdd-26" target="-BIKbDOcijmErjLYlXdd-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-26" value="Application" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-11">
+          <mxGeometry x="36.5" y="260" width="217.5" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-28" value="3.&amp;nbsp; 打包後部署" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="-BIKbDOcijmErjLYlXdd-11" source="-BIKbDOcijmErjLYlXdd-3" target="-BIKbDOcijmErjLYlXdd-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="-BIKbDOcijmErjLYlXdd-1" target="-BIKbDOcijmErjLYlXdd-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-15" value="2. Git clone" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="-BIKbDOcijmErjLYlXdd-14">
+          <mxGeometry x="0.0519" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-1" value="Git Server" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="175" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-18" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="690" y="95" width="180" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-16" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-18">
+          <mxGeometry y="51.73913043478261" width="180" height="118.26086956521738" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-17" value="Github" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-18">
+          <mxGeometry x="60" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-20" value="Jenkins UI" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="175" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-23" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="160" y="95" width="160" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-21" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-23">
+          <mxGeometry y="45" width="160" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-22" value="使用者瀏覽器" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="-BIKbDOcijmErjLYlXdd-23">
+          <mxGeometry x="30" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="-BIKbDOcijmErjLYlXdd-21" target="-BIKbDOcijmErjLYlXdd-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-BIKbDOcijmErjLYlXdd-25" value="1. 建置" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="-BIKbDOcijmErjLYlXdd-24">
+          <mxGeometry x="-0.2348" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
