@@ -47,8 +47,8 @@ const router = useRouter()
 const pageDataStore = usePageDataStore();
 const pageObj = reactive({
   form: {
-    account: 'ADMIN',
-    password: 'ADMIN'
+    account: '',
+    password: ''
   },
 })
 
