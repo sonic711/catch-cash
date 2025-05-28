@@ -3,15 +3,21 @@
     <el-container class="main-container">
       <el-aside width="240px" class="aside-nav">
         <div class="logo-container">
-          <h2 class="logo">Catch Cash</h2>
+          <RouterLink to="/dashboard" class="logo-link">
+            <h2 class="logo">Catch Cash</h2>
+          </RouterLink>
         </div>
         <div class="nav-links">
           <RouterLink to="/about" class="nav-link">
-            <el-icon><Document /></el-icon>
+            <el-icon>
+              <Document/>
+            </el-icon>
             <span>帳號管理</span>
           </RouterLink>
           <RouterLink to="/chatRoom" class="nav-link">
-            <el-icon><ChatDotRound /></el-icon>
+            <el-icon>
+              <ChatDotRound/>
+            </el-icon>
             <span>聊天室</span>
           </RouterLink>
         </div>
@@ -28,7 +34,8 @@
             <div class="user-actions">
               <el-dropdown>
                 <span class="user-dropdown">
-                  <el-avatar :size="32" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                  <el-avatar :size="32"
+                             src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
                   <span class="user-name">管理員</span>
                 </span>
                 <template #dropdown>
@@ -44,7 +51,7 @@
         </el-header>
         <el-main class="content-main">
           <router-view
-            v-slot="{ Component }">
+              v-slot="{ Component }">
             <el-card class="page-card">
               <component :is="Component"/>
             </el-card>
@@ -59,9 +66,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { Document, Grid, ChatDotRound } from '@element-plus/icons-vue';
+import {computed} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {ChatDotRound, Document} from '@element-plus/icons-vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -82,6 +89,16 @@ const logout = () => {
 </script>
 
 <style scoped>
+/* CSS Variables */
+:root {
+  --primary-color: #409EFF;
+  --secondary-color: #67C23A;
+  --light-color: #F5F7FA;
+  --info-color: #909399;
+  --border-color: #EBEEF5;
+  --background-color: #f0f2f5;
+}
+
 /* Main App Styles */
 .app-container {
   min-height: 100vh;
@@ -110,6 +127,17 @@ const logout = () => {
   color: black;
   font-size: 1.5rem;
   margin: 0;
+}
+
+.logo-link {
+  text-decoration: none;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+  cursor: pointer;
 }
 
 .nav-links {
@@ -178,10 +206,9 @@ const logout = () => {
 .content-main {
   padding: 2rem;
   background-color: var(--background-color);
-  background-image:
-    linear-gradient(to bottom right, rgba(240, 240, 245, 0.5), rgba(230, 230, 240, 0.3)),
-    radial-gradient(circle at 25% 25%, rgba(var(--primary-color-rgb, 52, 152, 219), 0.05) 1%, transparent 15%),
-    radial-gradient(circle at 75% 75%, rgba(var(--secondary-color-rgb, 46, 204, 113), 0.05) 1%, transparent 15%);
+  background-image: linear-gradient(to bottom right, rgba(240, 240, 245, 0.5), rgba(230, 230, 240, 0.3)),
+  radial-gradient(circle at 25% 25%, rgba(var(--primary-color-rgb, 52, 152, 219), 0.05) 1%, transparent 15%),
+  radial-gradient(circle at 75% 75%, rgba(var(--secondary-color-rgb, 46, 204, 113), 0.05) 1%, transparent 15%);
   background-size: 100% 100%, 60px 60px, 60px 60px;
   background-position: 0 0, 0 0, 0 0;
   overflow-y: auto;
