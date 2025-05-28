@@ -47,8 +47,8 @@ const router = useRouter()
 const pageDataStore = usePageDataStore();
 const pageObj = reactive({
   form: {
-    account: 'ADMIN',
-    password: 'ADMIN'
+    account: '',
+    password: ''
   },
 })
 
@@ -63,7 +63,6 @@ const rules = reactive<FormRules>({
 const login = async () => {
   ruleFormRef.value?.validate(async (valid: any) => {
     if (valid) {
-      // todo: 登入動作
       const data = {
         "name": pageObj.form.account,
         "password": pageObj.form.password
@@ -72,7 +71,7 @@ const login = async () => {
       if (res) {
         // 成功登入 儲存 access_token
         localStorage.setItem('X-Access-Token', res.accessToken)
-        // 導向儀表板
+        // 導向首頁
         await router.push('/home')
       } else {
         await ElMessageBox.alert('帳號或密碼錯誤', '錯誤', {
