@@ -12,7 +12,6 @@ const router = createRouter({
             name: 'notFound',
             component: () => import('../views/NotFound.vue')
         },
-
         {
             path: '/login',
             name: 'login',
@@ -23,6 +22,11 @@ const router = createRouter({
             name: 'dashboard',
             component: () => import('../views/Dashboard.vue'),
             children: [
+                {
+                    path: '/home',
+                    name: 'home',
+                    component: () => import('../views/Home.vue')
+                },
                 {
                     path: '/about',
                     name: 'about',

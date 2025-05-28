@@ -5,7 +5,7 @@
         :model="pageObj.form"
         :rules="rules">
       <el-row>
-        <el-col :span="12">
+        <el-col :xs="10" :sm="12">
           <el-form-item label="帳號" prop="account">
             <el-input
                 v-model="pageObj.form.account"
@@ -14,7 +14,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="12">
+        <el-col :xs="10" :sm="12">
           <el-form-item label="密碼" prop="password">
             <el-input
                 show-password
@@ -47,8 +47,8 @@ const router = useRouter()
 const pageDataStore = usePageDataStore();
 const pageObj = reactive({
   form: {
-    account: '',
-    password: ''
+    account: 'ADMIN',
+    password: 'ADMIN'
   },
 })
 
@@ -73,7 +73,7 @@ const login = async () => {
         // 成功登入 儲存 access_token
         localStorage.setItem('X-Access-Token', res.accessToken)
         // 導向儀表板
-        await router.push('/dashboard')
+        await router.push('/home')
       } else {
         await ElMessageBox.alert('帳號或密碼錯誤', '錯誤', {
           confirmButtonText: '確定',

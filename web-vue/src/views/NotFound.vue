@@ -1,13 +1,3 @@
-<script setup lang="ts">
-import {useRouter} from 'vue-router';
-
-const router = useRouter();
-
-const goToHome = () => {
-  router.push('/dashboard');
-};
-</script>
-
 <template>
   <div class="not-found-container">
     <div class="not-found-content">
@@ -18,6 +8,17 @@ const goToHome = () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+
+import {useRouter} from 'vue-router';
+
+const router = useRouter();
+const goToHome = () => {
+  router.push('/dashboard');
+};
+</script>
+
 
 <style scoped>
 .not-found-container {

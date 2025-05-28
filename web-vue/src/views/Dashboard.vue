@@ -3,7 +3,7 @@
     <el-container class="main-container">
       <el-aside width="240px" class="aside-nav">
         <div class="logo-container">
-          <RouterLink to="/dashboard" class="logo-link">
+          <RouterLink to="/home" class="logo-link">
             <h2 class="logo">Catch Cash</h2>
           </RouterLink>
         </div>
@@ -142,7 +142,7 @@ const logout = () => {
 
 .nav-links {
   padding: 1rem 0;
-  color: #000000; /* 設置文字顏色為黑色 */
+  color: black; /* 設置文字顏色為黑色 */
 }
 
 .nav-link {
