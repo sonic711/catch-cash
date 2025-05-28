@@ -27,7 +27,7 @@
             <file>${LOG_PATH}/${FOLDER_NAME}/current.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                 <!-- 每小時滾動，檔案命名包含日期、小時和索引，壓縮為 tgz -->
-                <fileNamePattern>${LOG_PATH}/${FOLDER_NAME}/%d{yyyyMMdd-HH}-%i.log.tar.gz</fileNamePattern>
+                <fileNamePattern>${LOG_PATH}/${FOLDER_NAME}/%d{yyyyMMdd-HH}-%i.log.gz</fileNamePattern>
                 <!-- 保留100個歷史檔案 -->
                 <maxHistory>100</maxHistory>
                 <!-- 設置時間單位為小時並限制檔案大小 -->
