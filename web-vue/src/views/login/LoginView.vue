@@ -6,7 +6,7 @@
           <h1 class="app-title">Catch Cash</h1>
           <p class="app-subtitle">您的財務管理助手</p>
         </div>
-        <LoginLogic />
+        <LoginLogic/>
       </div>
     </el-container>
   </div>

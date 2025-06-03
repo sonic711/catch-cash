@@ -1,8 +1,9 @@
 <template>
- 施工中 ...
+  <Architecture />
 </template>
 <script setup lang="ts">
 
+import Architecture from "@/views/home/architecture.vue";
 </script>
 
 
