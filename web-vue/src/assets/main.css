@@ -1,16 +1,273 @@
-/*@import './base.css';*/
+/* CSS Variables */
+:root {
+  --primary-color: #2f323f;
+  --secondary-color: #64647c;
+  --light-color: #c49f3b;
+  --info-color: #909399;
+  --border-color: #EBEEF5;
+  --background-color: #f0f2f5;
+  --text-light: #ffffff;
+  --text-dark: #333333;
+  --hover-color: rgba(196, 159, 59, 0.15);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--background-color);
+}
 
 #app {
-    width: 100vw; /* 視窗寬度 */
-    min-height: 100vh; /* 視窗高度 */
-    margin: 0; /* 移除邊距 */
-    padding: 0; /* 移除內邊距（或根據需要保留） */
-    font-weight: normal;
-    overflow: auto; /* 若內容超出，啟用滾動條 */
+  width: 100vw; /* 視窗寬度 */
+  min-height: 100vh; /* 視窗高度 */
+  margin: 0; /* 移除邊距 */
+  padding: 0; /* 移除內邊距（或根據需要保留） */
+  font-weight: normal;
+  overflow: auto; /* 若內容超出，啟用滾動條 */
 }
 
-body {
-    background: antiquewhite;
-    display: flex;
-    place-items: center;
+/* Main App Styles */
+.app-container {
+  min-height: 100vh;
+  background-color: var(--background-color);
 }
+
+.main-container {
+  min-height: 100%;
+}
+
+/* Sidebar Styles */
+.aside-nav {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  min-height: 100%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 5;
+  background-image: linear-gradient(to bottom, rgba(47, 50, 63, 1), rgba(47, 50, 63, 0.95));
+}
+
+.aside-nav::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--light-color), transparent);
+  opacity: 0.2;
+}
+
+.logo-container {
+  padding: 1.8rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(196, 159, 59, 0.05);
+}
+
+.logo {
+  color: var(--text-light);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.logo-link {
+  text-decoration: none;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.nav-links {
+  padding: 1.2rem 0;
+  margin-top: 0.5rem;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.9rem 1.5rem;
+  color: var(--text-light);
+  text-decoration: none;
+  transition: all 0.3s;
+  border-left: 3px solid transparent;
+  margin-bottom: 0.3rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-link:hover, .nav-link.router-link-active {
+  background-color: var(--hover-color);
+  color: var(--light-color);
+  border-left-color: var(--light-color);
+  font-weight: 500;
+}
+
+.nav-link .el-icon {
+  margin-right: 0.8rem;
+  font-size: 1.2rem;
+  color: var(--light-color);
+}
+
+.nav-link:hover .el-icon, .nav-link.router-link-active .el-icon {
+  transform: scale(1.1);
+}
+
+/* Header Styles */
+.main-header {
+  background-color: var(--light-color);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  padding: 0 1.8rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.main-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  opacity: 0.7;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.breadcrumb {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.user-dropdown {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.user-dropdown:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.user-name {
+  margin-left: 0.8rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+/* Main Content Styles */
+.content-main {
+  padding: 2.5rem;
+  background-color: var(--background-color);
+  background-image:
+    linear-gradient(to bottom right, rgba(240, 240, 245, 0.5), rgba(230, 230, 240, 0.3)),
+    radial-gradient(circle at 25% 25%, rgba(47, 50, 63, 0.03) 1%, transparent 15%),
+    radial-gradient(circle at 75% 75%, rgba(196, 159, 59, 0.03) 1%, transparent 15%);
+  background-size: 100% 100%, 80px 80px, 80px 80px;
+  background-position: 0 0, 0 0, 0 0;
+  overflow-y: auto;
+  position: relative;
+  min-height: calc(100vh - 120px); /* Account for header and footer */
+  height: auto; /* Ensure it grows with content */
+}
+
+.content-main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, var(--primary-color), var(--light-color));
+  opacity: 0.8;
+}
+
+.page-card {
+  margin-bottom: 2.5rem;
+  box-shadow: 0 10px 30px 0 rgba(47, 50, 63, 0.07), 0 3px 10px 0 rgba(47, 50, 63, 0.05);
+  border-radius: 10px;
+  border: none;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.98);
+  position: relative;
+}
+
+.page-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--light-color);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px 0 rgba(47, 50, 63, 0.09), 0 5px 15px 0 rgba(47, 50, 63, 0.07);
+}
+
+.page-card:hover::after {
+  opacity: 1;
+}
+
+/* Footer Styles */
+.main-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  padding: 1.2rem;
+  background-color: var(--light-color);
+  border-top: 1px solid rgba(47, 50, 63, 0.1);
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.main-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, var(--primary-color), transparent, var(--primary-color));
+  opacity: 0.2;
+}
+
+/* Element Plus Overrides */
+.el-card {
+  border: none !important;
+  padding: 1.2rem !important;
+}
+
+.el-card__body {
+  padding: 1.5rem !important;
+}
+

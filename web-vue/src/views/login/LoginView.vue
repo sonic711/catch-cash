@@ -26,7 +26,7 @@ import LoginLogic from "@/views/login/LoginLogic.vue";
   background-color: var(--background-color);
 }
 
-.common-layout .el-container {
+.common-layout {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,6 +35,7 @@ import LoginLogic from "@/views/login/LoginLogic.vue";
   position: absolute;
   top: 0;
   left: 0;
+  background-color: var(--secondary-color);
 }
 
 .login-container {
