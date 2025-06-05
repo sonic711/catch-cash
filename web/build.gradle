@@ -34,6 +34,8 @@ dependencies {
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
     // commons-io
     implementation 'commons-io:commons-io:2.14.0'
+    // prometheus
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.14.7'
 }
 
 processResources {
