@@ -35,7 +35,7 @@ ext.deploy_remotes = [
         DEV_server2: [
                 env: ['dev'],
                 bin_home: '/app/sean/bin',
-                app_home: '/app/sean/eureka-server',
+                app_home: '/app/sean/eureka-server2',
                 jar_name: 'eureka-server.jar',
                 spring_config_filename: 'application.properties',
                 env_info: { server_config ->
