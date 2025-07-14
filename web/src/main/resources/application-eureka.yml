@@ -6,7 +6,7 @@ eureka:
     fetchRegistry: true
     # Eureka Server Location
     service-url:
-      defaultZone: http://152.69.193.219:8761/eureka/
+      defaultZone: http://10.0.0.135:8761/eureka/,http://10.0.0.135:8762/eureka/
     # 更新客戶端清單時間
     registry-fetch-interval-seconds: 15
     refresh:
