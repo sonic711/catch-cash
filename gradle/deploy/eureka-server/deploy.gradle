@@ -18,6 +18,7 @@ ext.deploy_remotes = [
             put_files: { server_config ->
                 [
                     [from: "${project.projectDir.path}/src/main/resources/${server_config.spring_config_filename}", into: "${remote_prepared_folder}", is_into_app_home: true],
+                    [from: "${project.projectDir.path}/src/main/resources/log4j2.yml", into: "${remote_prepared_folder}", is_into_app_home: true],
                     [from: tasks.findByName('bootJar'), into: "${remote_prepared_folder}/${server_config.jar_name}", is_into_app_home: true, is_rename: true, is_fetch_git_properties: true],
                 ]
             },
@@ -49,6 +50,7 @@ ext.deploy_remotes = [
                 put_files: { server_config ->
                     [
                             [from: "${project.projectDir.path}/src/main/resources/${server_config.spring_config_filename}", into: "${remote_prepared_folder}", is_into_app_home: true],
+                            [from: "${project.projectDir.path}/src/main/resources/log4j2.yml", into: "${remote_prepared_folder}", is_into_app_home: true],
                             [from: tasks.findByName('bootJar'), into: "${remote_prepared_folder}/${server_config.jar_name}", is_into_app_home: true, is_rename: true, is_fetch_git_properties: true],
                     ]
                 },
