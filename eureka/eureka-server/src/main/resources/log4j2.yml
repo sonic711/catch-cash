@@ -1,0 +1,57 @@
+Configuration:
+  name: Default
+  status: DEBUG
+  monitorInterval: 30
+  shutdownHook: disable
+  Properties:
+    Property:
+      - name: BASE_PATH
+        value: ${sys:BASE_PATH:-/app/sean/log}
+      - name: APPLICATION_NAME
+        value: ${sys:APPLICATION_NAME:-eureka-server}
+      - name: LOG_PATH
+        value: ${property:BASE_PATH}/${property:APPLICATION_NAME}
+      - name: LOG_EXCEPTION_CONVERSION_WORD
+        value: '%xwEx{none}'
+  Appenders:
+    Console:
+      - name: STDOUT
+        target: SYSTEM_OUT
+        PatternLayout:
+          disableAnsi: ${sys:LOG4J2_DISABLE_ANSI:-false}
+          Pattern: '%d{HH:mm:ss.SSS} [%highlight{%thread}{INFO=green bold, DEBUG=Bright blue, TRACE=Normal, FATAL=red blink, ERROR=red, WARN=yellow}] %highlight{%-5level %logger{36}}{FATAL=red blink, ERROR=red, WARN=yellow, INFO=green bold, DEBUG=Bright blue, TRACE=Normal} %X - %msg%n${LOG_EXCEPTION_CONVERSION_WORD}'
+    RollingFile:
+      - name: APPLICATION
+        ignoreExceptions: false
+        fileName: ${LOG_PATH}/${APPLICATION_NAME}_application.log
+        filePattern: ${LOG_PATH}/%d{yyyyMMdd}/${APPLICATION_NAME}_application_%d{yyyyMMddHH}.log.gz
+        PatternLayout:
+          charset: "UTF-8"
+          pattern: '%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %X - %msg%n${LOG_EXCEPTION_CONVERSION_WORD}'
+        Policies:
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 1
+        DefaultRolloverStrategy:
+          max: 720
+          Delete:
+            - basePath: "${LOG_PATH}"
+              maxDepth: 2
+              IfFileName:
+                glob: "*/${APPLICATION_NAME}_application_*.log.gz"
+              IfLastModified:
+                age: "30d"
+  Loggers:
+    Logger:
+      - name: com.netflix
+        level: DEBUG
+        additivity: false
+        AppenderRef:
+          - ref: STDOUT
+          - ref: APPLICATION
+    Root:
+      level: INFO
+      includeLocation: true
+      AppenderRef:
+        - ref: STDOUT
+        - ref: APPLICATION
