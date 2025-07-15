@@ -32,7 +32,6 @@ public class DiscoveryService {
 	 * @param serviceName 服務名稱
 	 * @return List<ProviderInfo>
 	 */
-	@SuppressWarnings("unchecked")
 	public List<ProviderInfo> getProviderInfoList(String serviceName) {
 		try {
 			List<InstanceInfo> instances = this.eurekaClient.getInstancesByVipAddress(serviceName, false);
