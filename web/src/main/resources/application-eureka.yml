@@ -16,7 +16,7 @@ eureka:
     initial-status: STARTING
     # 客製 metadata 資訊
     metadata-map:
-      gRPCPort: ${grpc.server.port}
+      gRPCPort: "12345"
     hostname: ${spring.application.name}
     prefer-ip-address: true
     status-page-url-path: /actuator/info
