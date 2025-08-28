@@ -24,6 +24,23 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :xs="10" :sm="12">
+          <el-form-item label="驗證碼" prop="code">
+            <el-input
+                prop="code"
+                v-model="pageObj.form.code"
+                placeholder="請輸入密碼"/>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :xs="10" :sm="12" :offset="5">
+          <verify-code
+              v-model:verifyCode="identifyCode"
+          />
+        </el-col>
+      </el-row>
     </el-form>
     <el-row>
       <el-col :span="24">
@@ -41,14 +58,17 @@ import {usePageDataStore} from "@/stores/counter";
 import {reactive, ref} from "vue";
 import {ElMessageBox, type FormInstance, type FormRules} from "element-plus";
 import ApiService from "@/api/request";
+import VerifyCode from "@/views/login/VerifyCode.vue";
 
 const route = useRoute()
 const router = useRouter()
 const pageDataStore = usePageDataStore();
+let identifyCode = ref("");
 const pageObj = reactive({
   form: {
     account: '',
-    password: ''
+    password: '',
+    code: '',
   },
 })
 
@@ -58,11 +78,18 @@ const ruleFormRef = ref<FormInstance>()
 const rules = reactive<FormRules>({
   account: [{required: true, message: '請填寫帳號', trigger: ['blur', 'change']}],
   password: [{required: true, message: '請填寫密碼', trigger: 'change'}],
+  code: [{required: true, message: '請填寫驗證碼', trigger: 'change'}]
 });
 
 const login = async () => {
   ruleFormRef.value?.validate(async (valid: any) => {
     if (valid) {
+      if (identifyCode.value !== pageObj.form.code) {
+        await ElMessageBox.alert('驗證碼錯誤', '錯誤', {
+          confirmButtonText: '確定'
+        })
+        return
+      }
       const data = {
         "name": pageObj.form.account,
         "password": pageObj.form.password
