@@ -3,12 +3,9 @@ package com.sean.batch.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
+import org.springframework.scheduling.annotation.Async;
 
 import com.sean.batch.vo.InputVO;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 
 //@Component
 public class ServiceExecutorImpl implements ServiceExecutor {
@@ -20,6 +17,7 @@ public class ServiceExecutorImpl implements ServiceExecutor {
 		this.serviceMap = services;
 	}
 
+	@Async("batch")
 	public void executeServices(InputVO input, List<String> serviceSequence) {
 		for (String serviceId : serviceSequence) {
 			BtService service = serviceMap.get(serviceId);
