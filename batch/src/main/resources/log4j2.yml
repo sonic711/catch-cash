@@ -8,7 +8,7 @@ Configuration:
       - name: BASE_PATH
         value: ${sys:BASE_PATH:-/app/sean/log}
       - name: APPLICATION_NAME
-        value: ${sys:APPLICATION_NAME:-eureka-server}
+        value: ${sys:APPLICATION_NAME:-batch}
       - name: LOG_PATH
         value: ${property:BASE_PATH}/${property:APPLICATION_NAME}
       - name: LOG_EXCEPTION_CONVERSION_WORD

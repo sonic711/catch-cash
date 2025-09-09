@@ -68,7 +68,7 @@ processResources {
                 include("application-actuator.yml")
                 include("application-eureka.yml")
                 include("application-info.yml")
-                include("logback-spring.xml")
+                include("log4j2.yml")
                 include("sql/**")
             }
         }

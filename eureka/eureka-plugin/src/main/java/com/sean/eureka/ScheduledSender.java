@@ -34,7 +34,7 @@ public class ScheduledSender {
 			ProviderInfo providerInfo = discoveryService.getProviderInfo(Constant.WEB);
 			if (providerInfo != null) {
 				RestTemplate restTemplate = new RestTemplate();
-				String url = "http://" + providerInfo.getHostName() + ":" + providerInfo.getServerPort() + providerInfo.getContentPath() + "/";
+				String url = "http://" + providerInfo.getHostName() + ":" + providerInfo.getServerPort() + providerInfo.getContentPath() + "/health";
 				ResponseEntity<String> response = restTemplate.postForEntity(url, metricsData, String.class);
 				log.debug("Metrics sent successfully: {}", response.getStatusCode());
 			}

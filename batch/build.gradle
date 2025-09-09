@@ -44,6 +44,7 @@ processResources {
                 include 'application-actuator.yml'
                 include 'application-eureka.yml'
                 include 'application-info.yml'
+                include 'log4j2.yml'
             }
         }
     }

@@ -43,6 +43,7 @@ ext.deploy_remotes = [
                     [
                             [only_first_time: true, name: 'JAVA_HOME', value: '/app/sean/jdk-17.0.12'],
                             [only_first_time: false, name: 'SERVER_PORT', value: "8762"],
+                            [only_first_time: false, name: 'BASE_PATH', value: "/app/sean/log2"],
                             [only_first_time: false, name: 'BOOTJAR_LOCATION', value: "${server_config.jar_name}"],
                             [only_first_time: false, name: 'SPRING_CONFIG_ADDITIONAL_LOCATION', value: "${server_config.spring_config_filename}"],
                     ]

@@ -72,5 +72,52 @@ subprojects {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
         }
     }
+
+    dependencies {
+
+        api(
+                "org.apache.logging.log4j:log4j-core:$log4j2Version",
+                "org.apache.logging.log4j:log4j-api:$log4j2Version",
+                "org.apache.logging.log4j:log4j-web:$log4j2Version",
+
+                // use with SLF4J 2.x and 1.8.x
+                "org.apache.logging.log4j:log4j-slf4j2-impl:$log4j2Version",
+
+                "org.apache.logging.log4j:log4j-jcl:$log4j2Version",
+                "org.apache.logging.log4j:log4j-jul:$log4j2Version",
+                "org.apache.logging.log4j:log4j-1.2-api:$log4j2Version",
+
+                "net.openhft:chronicle-logger-log4j-2:$chronicleLoggerVersion",
+
+                // force the version of slf4j to latest used in third party libs
+                "org.slf4j:jul-to-slf4j:$slf4jVersion",
+                "org.slf4j:slf4j-api:$slf4jVersion",
+//          "org.slf4j:slf4j-simple:$slf4jVersion",
+
+                //  force jul -> slf4j -> log4j2
+                "org.slf4j:jul-to-slf4j:$slf4jVersion",
+
+                // for log4j2 yml configuration format
+                "com.fasterxml.jackson.core:jackson-core:$jacksonBomVersion",
+                "com.fasterxml.jackson.core:jackson-databind:$jacksonBomVersion",
+                "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonBomVersion",
+                "org.yaml:snakeyaml:$snakeyamlVersion",
+
+                // fasterxml
+                "com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider:$jacksonBomVersion",
+                "com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-base:$jacksonBomVersion",
+                "com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:$jacksonBomVersion",
+//            "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:$jacksonBomVersion",
+//            "com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:$jacksonBomVersion",
+//            "com.fasterxml.jackson.core:jackson-annotations:$jacksonBomVersion",
+
+                // for async logger
+                "com.lmax:disruptor:$disruptorVersion",
+        )
+
+        configurations.configureEach {
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        }
+    }
 }
 
