@@ -20,8 +20,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Unified async thread-pool configuration with multiple named executors.
- * Use @Async("<poolName>") to choose a pool.
+ * 統一的非同步執行緒池配置，可支持多個命名的執行器。
+ * 使用 @Async("<poolName>") 來選擇一個執行緒池。
  */
 @Slf4j
 @Configuration
@@ -46,7 +46,7 @@ public class AsyncThreadPoolConfig implements AsyncConfigurer {
 
 		Map<String, ThreadPoolTaskExecutor> map = new HashMap<>();
 		if (props.getExecutors().isEmpty()) {
-			// default pool if none configured
+			// 如果沒有配置，則使用預設執行緒池
 			ThreadPoolsProperties.ExecutorProperties def = new ThreadPoolsProperties.ExecutorProperties();
 			def.setCorePoolSize(2);
 			def.setMaxPoolSize(4);
@@ -54,14 +54,14 @@ public class AsyncThreadPoolConfig implements AsyncConfigurer {
 			props.getExecutors().put("default", def);
 		}
 		props.getExecutors().forEach((name, cfg) -> {
-			// If a bean with this name already exists (e.g., fallback explicit @Bean), reuse it
+			// 如果已存在同名的 Bean（例如，備用的顯式 @Bean），則重用它
 			if (beanFactory.containsBean(name)) {
 				try {
 					ThreadPoolTaskExecutor existing = (ThreadPoolTaskExecutor) beanFactory.getBean(name);
 					map.put(name, existing);
-					return; // skip creating/registering another bean
+					return; // 跳過創建/註冊另一個 bean
 				} catch (Exception e) {
-					// fall through to create new if type mismatch
+					// 如果類型不匹配，則繼續創建新的
 				}
 			}
 			ThreadPoolTaskExecutor ex = new ThreadPoolTaskExecutor();
@@ -81,7 +81,7 @@ public class AsyncThreadPoolConfig implements AsyncConfigurer {
 				}
 			}
 			ex.initialize();
-			// register each executor as individual bean so @Async(name) can find it
+			// 將每個執行器註冊為獨立的 bean，以便 @Async(name) 可以找到它
 			beanFactory.registerSingleton(name, ex);
 			map.put(name, ex);
 		});
@@ -112,18 +112,18 @@ public class AsyncThreadPoolConfig implements AsyncConfigurer {
 		return (ex, method, params) -> log.error("Uncaught async error in {} with params {}", method, params, ex);
 	}
 
-	// Provide default executor if @Async without name
+	// 如果 @Async 沒有指定名稱，則提供預設執行器
     @Override
     public java.util.concurrent.Executor getAsyncExecutor() {
-        // prefer a bean named "default" if exists
+        // 如果存在名為 "default" 的 bean，則優先使用
         try {
             return (ThreadPoolTaskExecutor) beanFactory.getBean("default");
         } catch (Exception ignored) {
-            return null; // fall back to SimpleAsyncTaskExecutor
+            return null; // 退回使用 SimpleAsyncTaskExecutor
         }
     }
 
-    // Fallback explicit beans to ensure @Async("batch") / @Async("common") always resolve
+    // 備用的顯式 Beans，以確保 @Async("batch") / @Async("common") 總能被解析
     @Bean(name = "batch")
     @ConditionalOnMissingBean(name = "batch")
     public ThreadPoolTaskExecutor batchExecutor() {

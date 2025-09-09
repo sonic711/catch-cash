@@ -15,6 +15,11 @@ public class BT002Service implements BtService {
 	public void execute(InputVO input) {
 		// 實作 BT001 的邏輯
 		System.out.println("Executing BT002");
+		try {
+			Thread.sleep(30000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override

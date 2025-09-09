@@ -10,7 +10,7 @@ public class ThreadPoolsProperties {
 
     private Map<String, ExecutorProperties> executors = new LinkedHashMap<>();
 
-    // monitor interval seconds
+    // 監控間隔秒數
     private int monitorIntervalSeconds = 60;
 
     public Map<String, ExecutorProperties> getExecutors() {
@@ -35,7 +35,7 @@ public class ThreadPoolsProperties {
         private int queueCapacity = 100;
         private int keepAliveSeconds = 60;
         private boolean allowCoreThreadTimeout = false;
-        private String rejectedPolicy = "ABORT"; // ABORT, CALLER_RUNS, DISCARD, DISCARD_OLDEST
+        private String rejectedPolicy = "ABORT"; // ABORT（中止）, CALLER_RUNS（呼叫者運行）, DISCARD（丟棄）, DISCARD_OLDEST（丟棄最舊的）
         private String threadNamePrefix;
 
         public int getCorePoolSize() { return corePoolSize; }
