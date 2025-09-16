@@ -1,0 +1,180 @@
+eureka:
+  # Eureka 環境標識 (開發環境)
+  # 作用：用於區分不同環境的 Eureka 集群
+  # 使用時機：多環境部署時避免服務誤註冊到錯誤環境
+  environment: DEV
+  client:
+    # 是否將此服務註冊到 Eureka Server
+    # 預設值：true
+    # 作用：控制是否將自己註冊為服務實例
+    # 使用時機：單機 Eureka Server 設為 false，集群模式設為 true
+    register-with-eureka: true
+    # 是否從 Eureka Server 獲取服務註冊清單
+    # 預設值：true
+    # 作用：控制是否拉取其他服務的註冊資訊
+    # 使用時機：純 Server 可設為 false，集群模式或需要調用其他服務設為 true
+    fetch-registry: true
+    # 首次服務實例資訊複製間隔時間 (秒)
+    # 預設值：40秒
+    # 作用：啟動後第一次向 Eureka Server 發送註冊資訊的延遲時間
+    # 使用時機：快速啟動時可以減少，需要預熱時可以增加
+    # 建議值：開發環境 5-10秒，生產環境 10-30秒
+    initial-instance-info-replication-interval-seconds: 10
+    # 服務實例資訊複製間隔時間 (秒)
+    # 預設值：30秒
+    # 作用：定期向 Eureka Server 同步實例資訊的間隔
+    # 使用時機：服務資訊變更頻繁時可以減少，穩定服務可以增加
+    # 建議值：3-30秒之間
+    instance-info-replication-interval-seconds: 15
+    # 從 Eureka Server 獲取註冊清單的間隔時間 (秒)
+    # 預設值：30秒
+    # 作用：Server 作為 Client 從其他 Server 拉取服務清單的頻率
+    # 使用時機：集群模式下保持資料一致性，故障恢復時快速同步
+    # 建議值：高可用環境 15-30秒，穩定環境 30-60秒
+    # 負載影響：3台 Server × 每30秒 = 0.1次請求/秒
+    registry-fetch-interval-seconds: 30
+    # Eureka Server 位置配置
+    service-url:
+      # 預設 Eureka Server 群組，支援多個 Server 做高可用
+      # 作用：定義可用的 Eureka Server 列表，自動故障轉移
+      # 使用時機：生產環境建議至少 2個 Server，開發環境可單個
+      # 格式：http://host:port/context-path/eureka/
+      defaultZone:
+  server:
+    # Peer 節點讀取超時時間
+    # 預設值：200ms
+    # 作用：從其他 Eureka Server 讀取資料的最大等待時間
+    # 使用時機：當出現 "socket read timeout" 錯誤時需要增加
+    # 建議值：內網 5000-10000ms，外網 10000-20000ms
+    peer-node-read-timeout-ms: 10000
+    # Peer 節點連線超時時間
+    # 預設值：200ms
+    # 作用：連線到其他 Eureka Server 的最大等待時間
+    # 使用時機：當 Server 間網路延遲較高時需要增加
+    # 建議值：內網 3000-5000ms，外網 5000-10000ms
+    peer-node-connect-timeout-ms: 5000
+    # Peer 連線閒置超時時間
+    # 預設值：30秒
+    # 作用：Peer 連線多久沒有活動就關閉
+    # 使用時機：頻繁的連線建立/關閉影響效能時可以增加
+    # 建議值：30-60秒
+    peer-node-connection-idle-timeout-seconds: 30
+    # Peer 節點總連線數
+    # 預設值：1000
+    # 作用：到所有 Peer 節點的總連線數上限
+    # 使用時機：記憶體有限或連線數需要控制時調低
+    # 建議值：小型集群 100-200，大型集群 500-1000
+    peer-node-total-connections: 1000
+    # Peer 複製重試次數
+    # 預設值：5
+    # 作用：向 Peer 節點複製資料失敗時的最大重試次數
+    # 使用時機：網路不穩定時可以增加，穩定網路可以減少
+    # 建議值：3-5次
+    number-of-replication-retries: 5
+    # 啟用批次複製
+    # 預設值：false
+    # 作用：將多個複製操作打包一起傳送，提高效率
+    # 使用時機：高併發環境下建議啟用
+    # 建議值：生產環境建議 true
+    batch-replication: true
+    # Peer 複製池最大元素數
+    # 預設值：10000
+    # 作用：等待複製到 Peer 的事件佇列大小
+    # 使用時機：高併發註冊時，佇列滿了會丟棄事件
+    # 建議值：根據註冊頻率調整，通常 5000-20000
+    max-elements-in-peer-replication-pool: 25000
+    # 狀態複製池最大元素數
+    # 預設值：10000
+    # 作用：等待複製狀態變更的事件佇列大小
+    # 使用時機：服務狀態變更頻繁時需要增加
+    # 建議值：通常與 peer-replication-pool 相同
+    max-elements-in-status-replication-pool: 25000
+    # Peer 複製最大執行緒數
+    # 預設值：20
+    # 作用：處理 Peer 複製的最大執行緒數
+    # 使用時機：複製任務積壓時可以增加
+    # 建議值：CPU 核心數的 2-4倍，通常 10-30
+    max-threads-for-peer-replication: 25
+    # Peer 複製最小執行緒數
+    # 預設值：5
+    # 作用：保持的最少複製執行緒數，避免冷啟動
+    # 使用時機：保持基本處理能力，通常不需要調整
+    # 建議值：max-threads 的 1/4 到 1/2
+    min-threads-for-peer-replication: 10
+    # 剔除無效服務的定時任務執行間隔 (毫秒)
+    # 預設值：60000ms (60秒)
+    # 作用：定期掃描並移除過期服務的時間間隔
+    # 使用時機：與 lease-expiration-duration 配合，建議 ≤ 過期時間
+    # 建議值：lease-expiration 的 1/2 到相等，這裡設為 15秒
+    # ⚠️ 重要：此值應該 ≤ lease-expiration-duration-in-seconds * 1000
+    eviction-interval-timer-in-ms: 15000
+    # 啟用自我保護模式，避免網路故障時誤剔除健康服務
+    # 預設值：true
+    # 作用：當心跳失敗率過高時暫停服務剔除，防止雪崩
+    # 使用時機：生產環境建議 true，測試環境可設 false 快速剔除
+    # 觸發條件：15分鐘內心跳失敗率 > 85%
+    enable-self-preservation: true
+    # 當服務清單為空時的等待時間 (毫秒)
+    # 預設值：5分鐘
+    # 作用：啟動時如果沒有其他 Peer，等待多久才開始接受註冊
+    # 使用時機：集群啟動時避免過早接受服務註冊
+    # 建議值：開發環境可以減少，生產環境保持預設值
+    wait-time-in-ms-when-sync-empty: 300000
+  instance:
+    # 服務狀態頁面 URL 路徑
+    # 預設值：/info
+    # 作用：提供服務詳細資訊的端點路徑
+    # 使用時機：與 Spring Boot Actuator 整合時使用
+    # 要求：端點必須返回 JSON 格式的服務資訊
+    status-page-url-path: /actuator/info
+    # 健康檢查 URL 路徑
+    # 預設值：/health
+    # 作用：Eureka Server 用來檢查服務健康狀態的端點
+    # 使用時機：啟用健康檢查時必須配置
+    # 要求：端點返回 {"status":"UP"} 表示健康
+    health-check-url-path: /actuator/health
+    # 服務租約過期時間，超過此時間未收到心跳則剔除服務 (秒)
+    # 預設值：90秒
+    # 作用：定義服務實例多久沒心跳就被視為不可用
+    # 使用時機：需要快速故障轉移時可以減少，穩定環境可以增加
+    # 建議值：網路穩定 30-60秒，不穩定 60-90秒
+    # ⚠️ 重要：建議 = lease-renewal-interval * 2-3 倍
+    lease-expiration-duration-in-seconds: 15
+    # 服務心跳發送間隔時間 (秒)
+    # 預設值：30秒
+    # 作用：服務實例向 Eureka Server 發送心跳的頻率
+    # 使用時機：需要快速故障檢測時可以減少
+    # 建議值：10-30秒之間
+    # ⚠️ 重要：lease-expiration 應該是此值的 2-3 倍
+    lease-renewal-interval-in-seconds: 10
+    # 優先使用 IP 位址而非主機名進行服務註冊
+    # 預設值：false
+    # 作用：控制在 Eureka 中顯示 IP 還是主機名
+    # 使用時機：容器環境或主機名解析有問題時設為 true
+    # 建議值：Docker/K8s 環境建議 true，傳統部署可 false
+    #prefer-ip-address: true
+    # 服務實例的主機名稱
+    # 預設值：本機主機名
+    # 作用：在 Eureka 控制台中顯示的實例標識
+    # 使用時機：需要自定義實例標識時配置
+    # 建議值：/etc/hosts 所設定的域名且搭配 instance-id
+    #hostname: ${spring.application.name}
+    instance-id: ${eureka.instance.hostname}:${spring.application.name}:${server.port}
+
+    # eureka server cluster mode setting
+    # 1.defaultZone註冊地只要更換成域名可至/etc/hosts 設定
+    # 2.eureka.client.register-with-eureka=true
+    # 3.eureka.client.fetch-registry=true
+    # 4.eureka 集群設定中 spring.application.name 必須一致
+    # 5.eureka.instance.prefer-ip-address=false
+    # 6.eureka server 節點必須要有自己的域名且各節點的 hostname 也必須是各自的域名
+    # 7.eureka instance id 也必須修正為 ${eureka.instance.hostname}:${spring.application.name}:${server.port}
+      # 這樣發出peer to peer 的時候才會因為設定好的域名連接到同步
+    # 才會顯示 available-replicas 而不是 unavailable-replicas
+
+    # eureka server standalone mode setting
+    # 1.defaultZone註冊地只要更換成域名可至/etc/hosts 設定且指向自己
+    # 2.eureka.instance.prefer-ip-address=false
+    # 3.eureka.client.register-with-eureka=false
+    # 4.eureka.client.fetch-registry=false
+      #避免註冊自己且不需要從其他節點獲取資訊如設定為true也可但自己角色會是server及client
