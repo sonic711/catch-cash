@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * ====================================================================== <br>
- * 程式代號: MonitoringService.java<br>
- * 程式說明: 這個服務負責定期監控和記錄系統的各項效能指標，包括但不限於：
  * </p>
  * <ul>
  * <li><strong>磁碟使用情況</strong> - 監控磁碟空間使用狀態</li>
@@ -287,12 +285,11 @@ public class MonitoringService {
 
 	private void printJvmClassMetrics() {
 		metricsReader.getGaugeValue("jvm.classes.loaded").ifPresent(value -> log.info("[JVM類別載入] 已載入類別數: {} 個 (目前載入到記憶體的類別總數)", numberFormat.format(value)));
-		metricsReader.getGaugeValue("jvm.classes.unloaded").ifPresent(value -> log.info("[JVM類別載入] 已卸載類別數: {} 個 (垃圾回收清理的類別數量)", numberFormat.format(value)));
+		metricsReader.getFunctionCounterValue("jvm.classes.unloaded").ifPresent(value -> log.info("[JVM類別載入] 已卸載類別數: {} 個 (垃圾回收清理的類別數量)", numberFormat.format(value.count())));
 	}
 
 	private void printJvmCompilationMetrics() {
-		// TODO
-		metricsReader.getCounterValue("jvm.compilation.time")//
+		metricsReader.getFunctionCounterValue("jvm.compilation.time")//
 				.ifPresent(value -> {
 					log.info("[JVM編譯器] JIT編譯次數: {} 次 (即時編譯器優化代碼的次數)", numberFormat.format(value.count()));
 				});
@@ -300,11 +297,10 @@ public class MonitoringService {
 
 	private void printJvmMemoryMetrics() {
 		metricsReader.getGaugeValue("jvm.memory.committed").ifPresent(value -> log.info("[JVM記憶體] 已提交記憶體: {} (作業系統保證可用的記憶體)", formatBytes(value)));
-		metricsReader.getGaugeValue("jvm.memory.max").ifPresent(value -> log.info("[JVM記憶體] 最大記憶體: {} (JVM可使用的記憶體上限)", formatBytes(value)));
-		metricsReader.getValueWithTag("jvm.memory.used", "area", "heap")//
-				.ifPresent(value -> log.info("[JVM記憶體] 已使用Heap記憶體: {} (目前實際使用的Heap記憶體)", formatBytes(value)));
-		metricsReader.getValueWithTag("jvm.memory.used", "area", "nonheap")//
-				.ifPresent(value -> log.info("[JVM記憶體] 已使用Non-Heap記憶體: {} (目前實際使用的Non-Heap記憶體)", formatBytes(value)));
+		metricsReader.getValueWithTag("jvm.memory.max", "id")//
+				.forEach((key, value) -> log.info("[JVM記憶體] {}最大記憶體: {} (JVM可使用的記憶體上限)", key, formatBytes(value)));
+		metricsReader.getValueWithTag("jvm.memory.used", "area")//
+				.forEach((key, value) -> log.info("[JVM記憶體] 已使用{}記憶體: {} (目前實際使用的記憶體)", key, formatBytes(value)));
 		metricsReader.getGaugeValue("jvm.memory.usage.after.gc").ifPresent(value -> log.info("[JVM記憶體] GC後記憶體使用率: {} (垃圾回收後的記憶體使用比例)", percentFormat.format(value)));
 	}
 
@@ -314,7 +310,6 @@ public class MonitoringService {
 		metricsReader.getCounterValue("jvm.gc.memory.allocated").ifPresent(value -> log.info("[JVM垃圾回收] 年輕代分配記憶體總量: {} (新建物件累計分配的記憶體)", formatBytes(value.count())));
 		metricsReader.getCounterValue("jvm.gc.memory.promoted").ifPresent(value -> log.info("[JVM垃圾回收] 老年代晉升記憶體總量: {} (從年輕代晉升到老年代的記憶體)", formatBytes(value.count())));
 		metricsReader.getGaugeValue("jvm.gc.overhead").ifPresent(value -> log.info("[JVM垃圾回收] GC開銷比例: {} (垃圾回收占用CPU時間的比例)", percentFormat.format(value)));
-		// TODO
 		metricsReader.getTimerValue("jvm.gc.pause")//
 				.ifPresent(value -> {
 					log.info("[JVM垃圾回收] GC暫停次數: {} 次 (垃圾回收執行的總次數)", numberFormat.format(value.count()));
@@ -327,9 +322,7 @@ public class MonitoringService {
 		metricsReader.getGaugeValue("jvm.threads.daemon").ifPresent(value -> log.info("[JVM執行緒] 背景執行緒數: {} 個 (系統背景服務執行緒)", numberFormat.format(value)));
 		metricsReader.getGaugeValue("jvm.threads.live").ifPresent(value -> log.info("[JVM執行緒] 活躍執行緒數: {} 個 (目前運行中的執行緒總數)", numberFormat.format(value)));
 		metricsReader.getGaugeValue("jvm.threads.peak").ifPresent(value -> log.info("[JVM執行緒] 執行緒峰值: {} 個 (歷史最高執行緒數量)", numberFormat.format(value)));
-		// TODO
-		metricsReader.getCounterValue("jvm.threads.started").ifPresent(value -> log.info("[JVM執行緒] 累計啟動執行緒數: {} 個 (程序啟動以來建立的執行緒總數)", numberFormat.format(value.count())));
-
+		metricsReader.getFunctionCounterValue("jvm.threads.started").ifPresent(value -> log.info("[JVM執行緒] 累計啟動執行緒數: {} 個 (程序啟動以來建立的執行緒總數)", numberFormat.format(value.count())));
 		metricsReader.getGaugeValue("jvm.threads.states").ifPresent(value -> log.info("[JVM執行緒] 執行緒狀態統計: {} 個 (各種狀態的執行緒數量)", numberFormat.format(value)));
 	}
 
@@ -338,9 +331,7 @@ public class MonitoringService {
 	}
 
 	private void printProcessMetrics() {
-		// TODO
-		metricsReader.getCounterValue("process.cpu.time").ifPresent(value -> log.info("[系統程序] CPU使用時間: {} 秒 (程序累計占用CPU的時間)", numberFormat.format(value.count())));
-
+		metricsReader.getFunctionCounterValue("process.cpu.time").ifPresent(value -> log.info("[系統程序] CPU使用時間: {} (程序累計占用CPU的時間)", formatDuration(value.count() / 1000000000)));
 		metricsReader.getGaugeValue("process.cpu.usage").ifPresent(value -> log.info("[系統程序] CPU使用率: {} (程序當前CPU占用比例)", percentFormat.format(value)));
 		metricsReader.getGaugeValue("process.files.max").ifPresent(value -> log.info("[系統程序] 最大檔案描述符數: {} 個 (程序可開啟的檔案上限)", numberFormat.format(value)));
 		metricsReader.getGaugeValue("process.files.open").ifPresent(value -> log.info("[系統程序] 已開啟檔案描述符數: {} 個 (程序目前開啟的檔案數量)", numberFormat.format(value)));
@@ -372,15 +363,47 @@ public class MonitoringService {
 	}
 
 	private void printTomcatMetrics() {
+
+		metricsReader.getValueWithTag("tomcat.connections.config.max", "name").forEach((protocol, value) -> {
+			log.info("[Web容器] Tomcat協定 {} 最大連線數: {} 個 (連線池配置的上限)", protocol, numberFormat.format(value));
+		});
+		metricsReader.getValueWithTag("tomcat.connections.current", "name").forEach((protocol, value) -> {
+			log.info("[Web容器] Tomcat協定 {} 目前連線數: {} 個 (目前建立中的連線數量)", protocol, numberFormat.format(value));
+		});
+		metricsReader.getValueWithTag("tomcat.connections.keepalive.current", "name").forEach((protocol, value) -> {
+			log.info("[Web容器] Tomcat協定 {} Keep-Alive連線數: {} 個 (持續保持的連線數量)", protocol, numberFormat.format(value));
+		});
+		metricsReader.getValueWithTag("tomcat.global.error", "name").forEach((processor, value) -> {
+			log.info("[Web容器] Tomcat處理器 {} 錯誤次數: {} 次 (全域請求處理錯誤總數)", processor, numberFormat.format(value));
+		});
+		metricsReader.getFunctionTimerValue("tomcat.global.request", "name").forEach((key, timer) -> {
+			log.info("[Web容器] Tomcat處理器 {} 已處理請求數: {} 次 (全域連線累計處理數)", key, numberFormat.format(timer.count()));
+			log.info("[Web容器] Tomcat處理器 {} 總處理請時間: {} 秒 (全域連線累計秒數)", key, numberFormat.format(timer.totalTime(TimeUnit.SECONDS)));
+		});
+		metricsReader.getValueWithTag("tomcat.global.request.max", "name").forEach((processor, value) -> {
+			log.info("[Web容器] Tomcat處理器 {} 最長請求時間: {} 秒 (單次請求最長處理時間)", processor, numberFormat.format(value));
+		});
+
+		metricsReader.getValueWithTag("tomcat.servlet.error", "name").forEach((servlet, value) -> {
+			log.info("[Web容器] Servlet {} 錯誤次數: {} 次 (該Servlet回應錯誤的總數)", servlet, numberFormat.format(value));
+		});
+		metricsReader.getFunctionTimerValue("tomcat.servlet.request", "name").forEach((key, timer) -> {
+			log.info("[Web容器] Servlet {} 請求次數: {} 次 (該Servlet累計處理的請求數)", key, numberFormat.format(timer.count()));
+			log.info("[Web容器] Servlet {} 請求總時間: {} 秒 (該Servlet累計處理的秒數)", key, numberFormat.format(timer.totalTime(TimeUnit.SECONDS)));
+		});
+		metricsReader.getValueWithTag("tomcat.servlet.request.max", "name").forEach((servlet, value) -> {
+			log.info("[Web容器] Servlet {} 最長請求時間: {} 秒 (單次請求的最長處理時間)", servlet, numberFormat.format(value));
+		});
+		metricsReader.getValueWithTag("tomcat.threads.busy", "name").forEach((executor, value) -> {
+			log.info("[Web容器] Tomcat執行器 {} 忙碌執行緒: {} 個 (目前正在處理請求的執行緒)", executor, numberFormat.format(value));
+		});
+		metricsReader.getValueWithTag("tomcat.threads.config.max", "name").forEach((executor, value) -> {
+			log.info("[Web容器] Tomcat執行器 {} 最大執行緒數: {} 個 (配置可用的執行緒上限)", executor, numberFormat.format(value));
+		});
+		metricsReader.getValueWithTag("tomcat.threads.current", "name").forEach((executor, value) -> {
+			log.info("[Web容器] Tomcat執行器 {} 目前執行緒數: {} 個 (當前建立的執行緒總數)", executor, numberFormat.format(value));
+		});
 		metricsReader.getGaugeValue("tomcat.sessions.active.current").ifPresent(value -> log.info("[Web容器] Tomcat活躍會話數: {} 個 (目前在線用戶的會話數)", numberFormat.format(value)));
-		metricsReader.getGaugeValue("tomcat.sessions.active.max").ifPresent(value -> log.info("[Web容器] Tomcat最大活躍會話數: {} 個 (同時在線用戶的歷史峰值)", numberFormat.format(value)));
-		metricsReader.getGaugeValue("tomcat.sessions.alive.max").ifPresent(value -> log.info("[Web容器] Tomcat會話最長存活時間: {} 秒 (用戶會話的最長持續時間)", numberFormat.format(value)));
-		// TODO
-		metricsReader.getCounterValue("tomcat.sessions.created").ifPresent(value -> log.info("[Web容器] Tomcat累計創建會話數: {} 個 (系統啟動以來建立的會話總數)", numberFormat.format(value.count())));
-		// TODO
-		metricsReader.getCounterValue("tomcat.sessions.expired").ifPresent(value -> log.info("[Web容器] Tomcat累計過期會話數: {} 個 (因超時而失效的會話數)", numberFormat.format(value.count())));
-		// TODO
-		metricsReader.getCounterValue("tomcat.sessions.rejected").ifPresent(value -> log.info("[Web容器] Tomcat累計拒絕會話數: {} 個 (因資源限制而拒絕的會話數)", numberFormat.format(value.count())));
 	}
 
 	/**
