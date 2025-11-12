@@ -152,7 +152,7 @@ eureka:
     # 作用：控制在 Eureka 中顯示 IP 還是主機名
     # 使用時機：容器環境或主機名解析有問題時設為 true
     # 建議值：Docker/K8s 環境建議 true，傳統部署可 false
-    #prefer-ip-address: true
+    prefer-ip-address: false
     # 服務實例的主機名稱
     # 預設值：本機主機名
     # 作用：在 Eureka 控制台中顯示的實例標識
